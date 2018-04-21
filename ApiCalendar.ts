@@ -104,7 +104,7 @@ class ApiCalendar {
      * Init Google Api
      * And create gapi in global
      */
-    public handleClientLoad(): void {
+    private handleClientLoad(): void {
         const script = document.createElement("script");
         script.src = "https://apis.google.com/js/api.js";
         document.body.appendChild(script);
