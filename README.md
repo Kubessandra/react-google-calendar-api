@@ -84,6 +84,24 @@ You need to be registered with handleAuthClick.
      * @returns {any} Promise on the event.
      */ 
     public createEventFromNow({time, summary, description = ''}: any, calendarId: string = this.calendar): any
+ ```
+#### Example
+
+```javascript
+  import ApiCalendar from 'react-google-calendar-api';
+
+  const eventFromNow: object = {
+      summary: "Poc Dev From Now",
+      time: 480,
+  };
+
+  ApiCalendar.createEventFromNow(eventFromNow)
+    .then((result: object) => {
+      console.log(result);
+        })
+     .catch((error: any) => {
+       console.log(error);
+        });
 ```
 
 ### List All Upcoming Events:
@@ -96,6 +114,18 @@ You need to be registered with handleAuthClick.
      * @returns {any} Promise with the result.
      */
     public listUpcomingEvents(maxResults: number, calendarId: string = this.calendar): any
+```
+
+#### Example
+
+```javascript
+  import ApiCalendar from 'react-google-calendar-api';
+  
+  if (ApiCalendar.sign)
+    ApiCalendar.listUpcomingEvents(10)
+      .then(({result}: any) => {
+        console.log(result.items);
+      });
 ```
 
 ## Utils
