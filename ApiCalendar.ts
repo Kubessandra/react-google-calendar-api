@@ -131,7 +131,7 @@ class ApiCalendar {
             })
         } else {
             console.log("Error: this.gapi not loaded");
-            return false
+            return false;
         }
     }
 
