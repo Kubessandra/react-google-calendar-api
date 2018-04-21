@@ -1,0 +1,32 @@
+{
+  "name": "react-google-calendar-api",
+  "version": "1.0.1",
+  "description": "An api to manage your google calendar",
+  "main": "ApiCalendar.js",
+  "scripts": {
+    "build": "tslint --project . && tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Insomniiak/react-google-calendar-api.git"
+  },
+  "keywords": [
+    "react",
+    "google",
+    "calendar",
+    "api"
+  ],
+  "author": "aymeric beudaert",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Insomniiak/react-google-calendar-api/issues"
+  },
+  "homepage": "https://github.com/Insomniiak/react-google-calendar-api#readme",
+  "devDependencies": {
+    "tslint": "^5.9.1",
+    "typescript": "^2.8.3"
+  },
+  "dependencies": {
+    "@types/node": "^9.6.6"
+  }
+}
