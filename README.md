@@ -46,6 +46,43 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
      */
     public handleSignoutClick(): void
 ```
+
+#### Example
+
+```javascript
+  import React, {ReactNode, SyntheticEvent} from 'react';
+  import ApiCalendar from 'react-google-calendar-api';
+  
+  export default class DoubleButton extends React.Component {
+      constructor(props) {
+        super(props);
+        this.handleItemClick = this.handleItemClick.bind(this);
+      }
+      
+      public handleItemClick(event: SyntheticEvent<any>, name: string): void {
+        if (name === 'sign-in') {
+          ApiCalendar.handleAuthClick();
+        } else if (name === 'sign-out') {
+          ApiCalendar.handleSignoutClick();
+        }
+      }
+
+      render(): ReactNode {
+        return (
+              <button
+                  onClick={(e) => this.handleItemClick(e, 'sign-in')}
+              >
+                sign-in
+              </button>
+              <button
+                  onClick={(e) => this.handleItemClick(e, 'sign-out')}
+              >
+                sign-out
+              </button>
+          );
+      }
+  }
+```
     
 ### setCalendar:
 
@@ -148,4 +185,36 @@ You need to be registered with handleAuthClick.
      * @param callback
      */
     public onLoad(callback: any): void
+```
+
+#### Example
+
+```javascript
+    import React, {ReactNode} from 'react';
+    import ApiCalendar from 'react-google-calendar-api';
+    
+    export default class StatusSign extends React.Component<any, any> {
+        constructor(props) {
+            super(props);
+            this.state = {
+              sign: ApiCalendar.sign,
+            };
+            this.signUpdate = this.signUpdate.bind(this);
+            ApiCalendar.onLoad(() => {
+                ApiCalendar.listenSign(this.signUpdate);
+            });
+        }
+
+        public signUpdate(sign: boolean): any {
+            this.setState({
+                sign
+            })
+        }
+        
+        render(): ReactNode {
+            return (
+                <div>{this.state.sign}</div>
+            );
+        }
+    }
 ```
