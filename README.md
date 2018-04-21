@@ -15,6 +15,17 @@ npm install --save react-google-calendar-api
 ```
 import ApiCalendar from 'react-google-calendar-api';
 ```
+Create a file apiGoogleconfig.json in the root directory with your googleApi clientId and ApiKey.
+https://console.developers.google.com/flows/enableapi?apiid=calendar.
+
+```json
+{
+  "clientId": "<CLIENT_ID>",
+  "apiKey": "<API_KEY>",
+  "scope": "https://www.googleapis.com/auth/calendar",
+  "discoveryDocs": ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
+}
+```
 
 ## Setup
 
@@ -61,7 +72,7 @@ You need to be registered with handleAuthClick.
      */
     public createEvent(event: object, calendarId: string = this.calendar): any {
  ```
-### Create Event From now:
+### Create Event From Now:
 
 ```javascript
      /**
@@ -73,4 +84,38 @@ You need to be registered with handleAuthClick.
      * @returns {any} Promise on the event.
      */ 
     public createEventFromNow({time, summary, description = ''}: any, calendarId: string = this.calendar): any
+```
+
+### List All Upcoming Events:
+
+```javascript
+    /**
+     * List all events in the calendar
+     * @param {number} maxResults to see
+     * @param {string} calendarId to see by default use the calendar attribute
+     * @returns {any} Promise with the result.
+     */
+    public listUpcomingEvents(maxResults: number, calendarId: string = this.calendar): any
+```
+
+## Utils
+
+### listenSign:
+
+```javascript
+     /**
+     * Execute the callback function when a user is disconnected or connected with the sign status.
+     * @param callback
+     */
+    public listenSign(callback: any): void
+```
+
+### onLoad:
+
+```javascript
+    /**
+     * Execute the callback function when gapi is loaded (gapi needs to be loaded to use any other methods)
+     * @param callback
+     */
+    public onLoad(callback: any): void
 ```
