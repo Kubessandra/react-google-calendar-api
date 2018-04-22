@@ -4,7 +4,7 @@
   "description": "An api to manage your google calendar",
   "main": "ApiCalendar.js",
   "scripts": {
-    "build": "tslint --project . && tsc",
+    "build": "tslint --project . && tsc && rm *.test.js",
     "test": "jest"
   },
   "jest": {
