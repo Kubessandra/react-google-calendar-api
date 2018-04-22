@@ -4,18 +4,23 @@ jobs:
                 docker:
                         - image: node:8.0
                 steps:
-                        - run: |
-                                node --version
-                                npm --version
-                        - checkout
+                        - run: 
+                                name: Check Version
+                                command: |
+                                        node --version
+                                        npm --version
         test:
                 docker:
                         - image: node:8.0
-                test:
+                steps:
                         - checkout
-                        - run: mkdir test; mkdir ./test/react ; mv * ./test/react/ ; echo '{"clientId": "${CLIENT_ID}",apiKey": "${API_KEY}","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs":"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' > ./apiGoogleconfig.json
+                        - run: 
+                                name: Create Env
+                                command: mkdir test; mkdir ./test/react ; mv * ./test/react/ ; echo '{"clientId": "${CLIENT_ID}",apiKey": "${API_KEY}","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs":"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' > ./apiGoogleconfig.json
 
-                        - run: cd test/react ; npm run test
+                        - run: 
+                                name: Test 
+                                command: cd test/react ; npm run test
 
 workflows:
         version: 2
