@@ -11,10 +11,6 @@ jobs:
                                         npm --version
                         - checkout
                         - run:
-                                name: "Install npm"
-                                command: npm install
-
-                        - run:
                                 name: "Create environment config"
                                 command: mkdir test; mkdir ./test/react ; mv * ./test/react/ ; echo '{"clientId": "${CLIENT_ID}",apiKey": "${API_KEY}","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs":"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' > ./apiGoogleconfig.json
 
