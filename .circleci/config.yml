@@ -36,7 +36,7 @@ jobs:
 
       - run: >
               echo '{"clientId": "${CLIENT_ID}",apiKey": "${API_KEY}","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs":"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' 
-              \> ./apiGoogleconfig.json
+              > ./apiGoogleconfig.json
         
       # run tests!
       - run: cd test/react ; npm run test 
