@@ -27,7 +27,7 @@ jobs:
 
       - run: npm install
 
-      - run: mkdir test ; mkdir ./test/react ; mv * ./test/react/
+      - run: mkdir .test ; mkdir ./.test/react ; mv * ./.test/react/ ; mv .test test
 
       - run: |
               echo '{"clientId": "${CLIENT_ID}",apiKey": "${API_KEY}","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs":"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' 
