@@ -14,6 +14,7 @@ class ApiCalendar {
         this.createEventFromNow = this.createEventFromNow.bind(this);
         this.listenSign = this.listenSign.bind(this);
         this.onLoad = this.onLoad.bind(this);
+        this.setCalendar = this.setCalendar.bind(this);
         this.handleClientLoad();
     }
     /**
@@ -38,6 +39,18 @@ class ApiCalendar {
                 this.onLoadCallback();
             }
         });
+    }
+    /**
+     * Init Google Api
+     * And create gapi in global
+     */
+    handleClientLoad() {
+        const script = document.createElement("script");
+        script.src = "https://apis.google.com/js/api.js";
+        document.body.appendChild(script);
+        script.onload = () => {
+            window['gapi'].load('client:auth2', this.initClient);
+        };
     }
     /**
      * Sign in Google user account
@@ -91,18 +104,6 @@ class ApiCalendar {
         else {
             console.log("Error: this.gapi not loaded");
         }
-    }
-    /**
-     * Init Google Api
-     * And create gapi in global
-     */
-    handleClientLoad() {
-        const script = document.createElement("script");
-        script.src = "https://apis.google.com/js/api.js";
-        document.body.appendChild(script);
-        script.onload = () => {
-            window['gapi'].load('client:auth2', this.initClient);
-        };
     }
     /**
      * List all events in the calendar
