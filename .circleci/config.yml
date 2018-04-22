@@ -1,30 +1,38 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
 version: 2
 jobs:
-        build:
-                docker:
-                        - image: node:8.0
-                steps:
-                        - run: 
-                                name: Check Version
-                                command: |
-                                        node --version
-                                        npm --version
-        test:
-                docker:
-                        - image: node:8.0
-                steps:
-                        - checkout
-                        - run: 
-                                name: Create Env
-                                command: mkdir test; mkdir ./test/react ; mv * ./test/react/ ; echo '{"clientId": "${CLIENT_ID}",apiKey": "${API_KEY}","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs":"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' > ./apiGoogleconfig.json
+  build:
+    docker:
+      # specify the version you desire here
+      - image: circleci/node:7.10
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/mongo:3.4.4
 
-                        - run: 
-                                name: Test 
-                                command: cd test/react ; npm run test
+    working_directory: ~/repo
 
-workflows:
-        version: 2
-        build_and_test:
-                jobs:
-                        - build
-                        - test
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: npm install
+      - run: mkdir test; mkdir ./test/react ; mv * ./test/react/ ; echo '{"clientId": "${CLIENT_ID}",apiKey": "${API_KEY}","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs":"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' > ./apiGoogleconfig.json
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+        
+      # run tests!
+      - run: cd test/react ; npm run test
+                          
