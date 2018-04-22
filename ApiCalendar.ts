@@ -17,6 +17,7 @@ class ApiCalendar {
         this.listenSign = this.listenSign.bind(this);
         this.onLoad = this.onLoad.bind(this);
         this.setCalendar = this.setCalendar.bind(this);
+        this.deleteEvent = this.deleteEvent.bind(this);
 
         this.handleClientLoad();
     }
@@ -157,10 +158,15 @@ class ApiCalendar {
             }
         };
 
-        return this.gapi.client.calendar.events.insert({
-            'calendarId': calendarId,
-            'resource': event,
-        });
+        if (this.gapi) {
+            return this.gapi.client.calendar.events.insert({
+                'calendarId': calendarId,
+                'resource': event,
+            });
+        } else {
+            console.log("Error: gapi is not loaded use onLoad before please.");
+            return null;
+        }
     }
 
     /**
@@ -170,10 +176,30 @@ class ApiCalendar {
      * @returns {any}
      */
     public createEvent(event: object, calendarId: string = this.calendar): any {
-        return this.gapi.client.calendar.events.insert({
-            'calendarId': calendarId,
-            'resource': event,
-        });
+        if (this.gapi) {
+            return this.gapi.client.calendar.events.insert({
+                'calendarId': calendarId,
+                'resource': event,
+            });
+        } else {
+            console.log("Error: gapi is not loaded use onLoad before please.");
+            return null;
+        }
+    }
+
+    /**
+     * Delete an event in the calendar.
+     * @param {string} eventId of the event to delete.
+     * @param {string} calendarId where the event is.
+     * @returns {any} Promise resolved when the event is deleted.
+     */
+    public deleteEvent(eventId: string, calendarId: string = this.calendar): any {
+        if (this.gapi) {
+            return this.gapi.client.calendar.events.delete(eventId, calendarId);
+        } else {
+            console.log("Error: gapi is not loaded use onLoad before please.");
+            return null;
+        }
     }
 }
 
