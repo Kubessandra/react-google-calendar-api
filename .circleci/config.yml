@@ -31,11 +31,16 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: mkdir .test ; mkdir ./.test/react ; mv * ./.test/react/ ; mv .test test
-      - run: > 
+      - run: 
+          name: Create Env 
+          command: mkdir .test ; mkdir ./.test/react ; mv * ./.test/react/ ; mv .test test
+      - run: 
+          name: Create Config 
+          command: > 
               echo ''{\"clientId\": \"${CLIENT_ID}\",\"apiKey\": \"${API_KEY}\",
               \"scope\": \"https://www.googleapis.com/auth/calendar\",\"discoveryDocs\": [\"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest\"]}'' 
               > ./apiGoogleconfig.json 
-      - run: cat ./apiGoogleconfig.json
       # run tests!
-      - run: cd test/react ; npm run test 
+      - run: 
+          name: Test 
+          command: cd test/react ; npm run test 
