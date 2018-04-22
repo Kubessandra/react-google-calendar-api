@@ -8,6 +8,11 @@
     "test": "jest"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
+      }
+    },
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
