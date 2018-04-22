@@ -4,7 +4,22 @@
   "description": "An api to manage your google calendar",
   "main": "ApiCalendar.js",
   "scripts": {
-    "build": "tslint --project . && tsc"
+    "build": "tslint --project . && tsc && rm *.test.js",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   },
   "repository": {
     "type": "git",
@@ -23,7 +38,10 @@
   },
   "homepage": "https://github.com/Insomniiak/react-google-calendar-api#readme",
   "devDependencies": {
+    "@types/jest": "^22.2.3",
+    "jest": "^22.4.3",
     "linted": "0.0.2",
+    "ts-jest": "^22.4.4",
     "tslint": "^5.9.1",
     "typescript": "^2.8.3"
   },
