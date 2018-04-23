@@ -45,6 +45,9 @@ class ApiCalendar {
                     this.onLoadCallback();
                 }
             })
+            .catch((error: any) => {
+                console.log("Error: Client impossible to Init\n" + JSON.stringify(error));
+            })
     }
 
     /**

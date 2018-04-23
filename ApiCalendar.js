@@ -15,6 +15,7 @@ class ApiCalendar {
         this.listenSign = this.listenSign.bind(this);
         this.onLoad = this.onLoad.bind(this);
         this.setCalendar = this.setCalendar.bind(this);
+        this.deleteEvent = this.deleteEvent.bind(this);
         this.handleClientLoad();
     }
     /**
@@ -38,6 +39,9 @@ class ApiCalendar {
             if (this.onLoadCallback) {
                 this.onLoadCallback();
             }
+        })
+            .catch((error) => {
+            console.log("Error: Client impossible to Init\n" + JSON.stringify(error));
         });
     }
     /**
@@ -148,10 +152,16 @@ class ApiCalendar {
                 timeZone: "Europe/Paris",
             }
         };
-        return this.gapi.client.calendar.events.insert({
-            'calendarId': calendarId,
-            'resource': event,
-        });
+        if (this.gapi) {
+            return this.gapi.client.calendar.events.insert({
+                'calendarId': calendarId,
+                'resource': event,
+            });
+        }
+        else {
+            console.log("Error: gapi is not loaded use onLoad before please.");
+            return null;
+        }
     }
     /**
      * Create Calendar event
@@ -160,10 +170,31 @@ class ApiCalendar {
      * @returns {any}
      */
     createEvent(event, calendarId = this.calendar) {
-        return this.gapi.client.calendar.events.insert({
-            'calendarId': calendarId,
-            'resource': event,
-        });
+        if (this.gapi) {
+            return this.gapi.client.calendar.events.insert({
+                'calendarId': calendarId,
+                'resource': event,
+            });
+        }
+        else {
+            console.log("Error: gapi is not loaded use onLoad before please.");
+            return null;
+        }
+    }
+    /**
+     * Delete an event in the calendar.
+     * @param {string} eventId of the event to delete.
+     * @param {string} calendarId where the event is.
+     * @returns {any} Promise resolved when the event is deleted.
+     */
+    deleteEvent(eventId, calendarId = this.calendar) {
+        if (this.gapi) {
+            return this.gapi.client.calendar.events.delete(eventId, calendarId);
+        }
+        else {
+            console.log("Error: gapi is not loaded use onLoad before please.");
+            return null;
+        }
     }
 }
 const apiCalendar = new ApiCalendar();
