@@ -18,7 +18,7 @@ import ApiCalendar from 'react-google-calendar-api';
 
 ### Typescript Import
 ```
-import * as ApiCalendar from 'react-google-calendar-api/ApiCalendar';
+import ApiCalendar from 'react-google-calendar-api/ApiCalendar';
 ```
 
 Create a file apiGoogleconfig.json in the root directory with your googleApi clientId and ApiKey.
