@@ -15,6 +15,12 @@ npm install --save react-google-calendar-api
 ```
 import ApiCalendar from 'react-google-calendar-api';
 ```
+
+### Typescript Import
+```
+import ApiCalendar from 'react-google-calendar-api/ApiCalendar';
+```
+
 Create a file apiGoogleconfig.json in the root directory with your googleApi clientId and ApiKey.
 https://console.developers.google.com/flows/enableapi?apiid=calendar.
 
