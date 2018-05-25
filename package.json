@@ -2,10 +2,11 @@
   "name": "react-google-calendar-api",
   "version": "1.0.5",
   "description": "An api to manage your google calendar",
-  "main": "ApiCalendar.js",
+  "main": "./build/ApiCalendar.js",
   "scripts": {
     "build": "tslint --project . && tsc && rm *.test.js",
-    "test": "jest"
+    "test": "jest",
+    "babel": "babel ./ApiCalendar.js -d build"
   },
   "jest": {
     "transform": {
@@ -39,13 +40,15 @@
   "homepage": "https://github.com/Insomniiak/react-google-calendar-api#readme",
   "devDependencies": {
     "@types/jest": "^22.2.3",
-    "jest": "^22.4.3",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "jest": "^22.4.4",
     "linted": "0.0.2",
-    "ts-jest": "^22.4.4",
-    "tslint": "^5.9.1",
+    "ts-jest": "^22.4.6",
+    "tslint": "^5.10.0",
     "typescript": "^2.8.3"
   },
   "dependencies": {
-    "@types/node": "^9.6.6"
+    "@types/node": "^9.6.18"
   }
 }
