@@ -1,6 +1,6 @@
 declare var test: any;
 
-import ApiCalendar from './ApiCalendar';
+import ApiCalendar from './build/ApiCalendar';
 
 test('setCalendar method', () => {
     ApiCalendar.setCalendar('test-calendar');
