@@ -4,7 +4,11 @@ jobs:
     include:
         install: npm i
         stage: Create Env 
-        script: mkdir .test ; mkdir ./.test/react ; mv * ./.test/react/ ; mv .test test
+        script: 
+         - mkdir .test 
+         - mkdir ./.test/react 
+         - mv * ./.test/react/
+         - mv .test test
         stage: Create Config
         script: > 
               echo ''{\"clientId\": \"${CLIENT_ID}\",\"apiKey\": \"${API_KEY}\",
