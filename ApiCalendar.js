@@ -5,17 +5,22 @@ class ApiCalendar {
         this.gapi = null;
         this.onLoadCallback = null;
         this.calendar = 'primary';
-        this.updateSigninStatus = this.updateSigninStatus.bind(this);
-        this.initClient = this.initClient.bind(this);
-        this.handleSignoutClick = this.handleSignoutClick.bind(this);
-        this.handleAuthClick = this.handleAuthClick.bind(this);
-        this.createEvent = this.createEvent.bind(this);
-        this.listUpcomingEvents = this.listUpcomingEvents.bind(this);
-        this.createEventFromNow = this.createEventFromNow.bind(this);
-        this.listenSign = this.listenSign.bind(this);
-        this.onLoad = this.onLoad.bind(this);
-        this.setCalendar = this.setCalendar.bind(this);
-        this.handleClientLoad();
+        try {
+            this.updateSigninStatus = this.updateSigninStatus.bind(this);
+            this.initClient = this.initClient.bind(this);
+            this.handleSignoutClick = this.handleSignoutClick.bind(this);
+            this.handleAuthClick = this.handleAuthClick.bind(this);
+            this.createEvent = this.createEvent.bind(this);
+            this.listUpcomingEvents = this.listUpcomingEvents.bind(this);
+            this.createEventFromNow = this.createEventFromNow.bind(this);
+            this.listenSign = this.listenSign.bind(this);
+            this.onLoad = this.onLoad.bind(this);
+            this.setCalendar = this.setCalendar.bind(this);
+            this.handleClientLoad();
+        }
+        catch (e) {
+            console.log(e);
+        }
     }
     /**
      * Update connection status.
@@ -38,6 +43,9 @@ class ApiCalendar {
             if (this.onLoadCallback) {
                 this.onLoadCallback();
             }
+        })
+            .catch((e) => {
+            console.log(e);
         });
     }
     /**
@@ -45,6 +53,7 @@ class ApiCalendar {
      * And create gapi in global
      */
     handleClientLoad() {
+        this.gapi = window['gapi'];
         const script = document.createElement("script");
         script.src = "https://apis.google.com/js/api.js";
         document.body.appendChild(script);
@@ -166,5 +175,11 @@ class ApiCalendar {
         });
     }
 }
-const apiCalendar = new ApiCalendar();
+let apiCalendar;
+try {
+    apiCalendar = new ApiCalendar();
+}
+catch (e) {
+    console.log(e);
+}
 export default apiCalendar;
