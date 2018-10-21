@@ -1,6 +1,6 @@
 # Contributing
 
-To contribute, head to [github](https://github.com/Horyus/battlebird).
+To contribute, head to [github](https://github.com/Insomniiak/react-google-calendar-api).
 When contributing to this repository, please first discuss the change you wish to make via issue,
 email, or any other method with the owners of this repository before making a change.
 
@@ -13,11 +13,11 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 
 **2** - Each Pull Request should have its own issue created and referenced in every commit. All branches
-   should start from `develop` branch. Naming convention for the issue is `[(THEME)] (TITLE)` and Branch Naming
+   should start from `development` branch. Naming convention for the issue is `[(THEME)] (TITLE)` and Branch Naming
    should be `(TYPE)/(PROJECT_ID)-(ISSUE_NUMBER)-(TITLE)`. As an example, if you want to add
    something related with Redux, Issue name can be `[Redux] Add Reducer`, and Branch should be
-   (saying the issue number is 42) `feature/BTBD-42-add-reducer`. The github pull request title should be
-   named `Resolve BTBD #42 "[Redux] Add Reducer"` and should contain `Resolve RGCA #42` in the description,
+   (saying the issue number is 42) `feature/RGCA-42-add-reducer`. The github pull request title should be
+   named `Resolve RGCA #42 "[Redux] Add Reducer"` and should contain `Resolve RGCA #42` in the description,
    for github to properly link the pull request and the issue.
 
    **THEME**: 1-2 Words defining the theme of the contribution. You can look at other contributions to use
@@ -112,7 +112,7 @@ further defined and clarified by project maintainers.
 ### Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the project team at `iulian@rotaru.fr`. All
+reported by contacting the project team at `aymeric.beudaert@gmail.com`. All
 complaints will be reviewed and investigated and will result in a response that
 is deemed necessary and appropriate to the circumstances. The project team is
 obligated to maintain confidentiality with regard to the reporter of an incident.
