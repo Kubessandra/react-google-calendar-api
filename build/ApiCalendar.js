@@ -8,7 +8,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Config = require("../../../apiGoogleconfig.json");
+var Config = require("../../apiGoogleconfig.json");
 
 var ApiCalendar = function () {
     function ApiCalendar() {
@@ -18,17 +18,21 @@ var ApiCalendar = function () {
         this.gapi = null;
         this.onLoadCallback = null;
         this.calendar = 'primary';
-        this.updateSigninStatus = this.updateSigninStatus.bind(this);
-        this.initClient = this.initClient.bind(this);
-        this.handleSignoutClick = this.handleSignoutClick.bind(this);
-        this.handleAuthClick = this.handleAuthClick.bind(this);
-        this.createEvent = this.createEvent.bind(this);
-        this.listUpcomingEvents = this.listUpcomingEvents.bind(this);
-        this.createEventFromNow = this.createEventFromNow.bind(this);
-        this.listenSign = this.listenSign.bind(this);
-        this.onLoad = this.onLoad.bind(this);
-        this.setCalendar = this.setCalendar.bind(this);
-        this.handleClientLoad();
+        try {
+            this.updateSigninStatus = this.updateSigninStatus.bind(this);
+            this.initClient = this.initClient.bind(this);
+            this.handleSignoutClick = this.handleSignoutClick.bind(this);
+            this.handleAuthClick = this.handleAuthClick.bind(this);
+            this.createEvent = this.createEvent.bind(this);
+            this.listUpcomingEvents = this.listUpcomingEvents.bind(this);
+            this.createEventFromNow = this.createEventFromNow.bind(this);
+            this.listenSign = this.listenSign.bind(this);
+            this.onLoad = this.onLoad.bind(this);
+            this.setCalendar = this.setCalendar.bind(this);
+            this.handleClientLoad();
+        } catch (e) {
+            console.log(e);
+        }
     }
     /**
      * Update connection status.
@@ -59,6 +63,8 @@ var ApiCalendar = function () {
                 if (_this.onLoadCallback) {
                     _this.onLoadCallback();
                 }
+            }).catch(function (e) {
+                console.log(e);
             });
         }
         /**
@@ -71,10 +77,12 @@ var ApiCalendar = function () {
         value: function handleClientLoad() {
             var _this2 = this;
 
+            this.gapi = window['gapi'];
             var script = document.createElement("script");
             script.src = "https://apis.google.com/js/api.js";
             document.body.appendChild(script);
             script.onload = function () {
+                console.log("LOAD");
                 window['gapi'].load('client:auth2', _this2.initClient);
             };
         }
@@ -225,5 +233,10 @@ var ApiCalendar = function () {
     return ApiCalendar;
 }();
 
-var apiCalendar = new ApiCalendar();
+var apiCalendar = void 0;
+try {
+    apiCalendar = new ApiCalendar();
+} catch (e) {
+    console.log(e);
+}
 exports.default = apiCalendar;
