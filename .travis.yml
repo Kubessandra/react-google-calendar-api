@@ -3,16 +3,16 @@ node_js: '8'
 jobs:
     include:
         node_js: '8'
+        cache:
+            directories:
+                - "node_modules"
         install: npm i
-        script: 
-          - mkdir .test 
+        before_script:
+          - mkdir ./.test 
           - mkdir ./.test/react 
           - mv * ./.test/react/
           - mv .test test
-        script: > 
-              echo ''{\"clientId\": \"${CLIENT_ID}\",\"apiKey\": \"${API_KEY}\",
-              \"scope\": \"https://www.googleapis.com/auth/calendar\",\"discoveryDocs\": [\"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest\"]}''
-              > ./apiGoogleconfig.json 
+          - echo ''{\"clientId\": \"$CLIENT_ID\",\"apiKey\": \"$API_KEY\",\"scope\": \"https://www.googleapis.com/auth/calendar\",\"discoveryDocs\": [\"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest\"]}'' > ./apiGoogleconfig.json 
         script: 
           - cd test/react
           - npm run test
