@@ -8,7 +8,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Config = require("../../apiGoogleconfig.json");
+var Config = require("../../../apiGoogleconfig.json");
 
 var ApiCalendar = function () {
     function ApiCalendar() {
@@ -82,7 +82,6 @@ var ApiCalendar = function () {
             script.src = "https://apis.google.com/js/api.js";
             document.body.appendChild(script);
             script.onload = function () {
-                console.log("LOAD");
                 window['gapi'].load('client:auth2', _this2.initClient);
             };
         }

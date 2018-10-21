@@ -1,4 +1,4 @@
-const Config = require("../../apiGoogleconfig.json");
+const Config = require("../../../apiGoogleconfig.json");
 class ApiCalendar {
     constructor() {
         this.sign = false;
@@ -58,7 +58,6 @@ class ApiCalendar {
         script.src = "https://apis.google.com/js/api.js";
         document.body.appendChild(script);
         script.onload = () => {
-            console.log("LOAD");
             window['gapi'].load('client:auth2', this.initClient);
         };
     }
