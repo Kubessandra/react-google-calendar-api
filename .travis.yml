@@ -12,7 +12,7 @@ jobs:
           - mkdir ./.test/react 
           - mv * ./.test/react/
           - mv .test test
-          - echo ''{\"clientId\": \"$CLIENT_ID\",\"apiKey\": \"$API_KEY\",\"scope\": \"https://www.googleapis.com/auth/calendar\",\"discoveryDocs\": [\"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest\"]}'' > ./apiGoogleconfig.json 
+          - echo '{"clientId": "$CLIENT_ID","apiKey": "$API_KEY","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs": ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' > ./apiGoogleconfig.json 
         script: 
           - cd test/react
           - npm run test
