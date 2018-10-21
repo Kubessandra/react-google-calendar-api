@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.com/Insomniiak/react-google-calendar-api.svg?branch=master)](https://travis-ci.com/Insomniiak/react-google-calendar-api)
+![Build Status](https://travis-ci.com/Insomniiak/react-google-calendar-api.svg?branch=master)]
 ![npm (custom registry)](https://img.shields.io/npm/l/express.svg?registry_uri=https%3A%2F%2Fregistry.npmjs.com)
 
 # react-google-calendar-api
