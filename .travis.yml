@@ -6,13 +6,14 @@ jobs:
         cache:
             directories:
                 - "node_modules"
-        install: npm i
+        install:
+          - npm i
         before_script:
           - mkdir ./.test 
           - mkdir ./.test/react 
           - mv * ./.test/react/
           - mv .test test
-          - echo '{"clientId": "$CLIENT_ID","apiKey": "$API_KEY","scope": "https://www.googleapis.com/auth/calendar","discoveryDocs": ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]}' > ./apiGoogleconfig.json 
+          - ./.testEnv.sh
         script: 
           - cd test/react
           - npm run test
