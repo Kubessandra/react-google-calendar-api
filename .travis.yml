@@ -2,19 +2,20 @@ language: node_js
 node_js: '8'
 jobs:
     include:
+        node_js: '8'
         install: npm i
-        stage: "Create Env"
+        - stage: "Create Env"
         script: 
-         - mkdir .test 
-         - mkdir ./.test/react 
-         - mv * ./.test/react/
-         - mv .test test
-        stage: "Create Config"
+          - mkdir .test 
+          - mkdir ./.test/react 
+          - mv * ./.test/react/
+          - mv .test test
+        - stage: "Create Config"
         script: > 
-              echo ''{\"clientId\": \"${CLIENT_ID}\",\"apiKey\": \"${API_KEY}\",
-              \"scope\": \"https://www.googleapis.com/auth/calendar\",\"discoveryDocs\": [\"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest\"]}'' 
+              echo '{\"clientId\": \"${CLIENT_ID}\",\"apiKey\": \"${API_KEY}\",
+              \"scope\": \"https://www.googleapis.com/auth/calendar\",\"discoveryDocs\": [\"https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest\"]}' 
               > ./apiGoogleconfig.json 
-        stage: "Testing"
+        - stage: "Testing"
         script: 
           - cd test/react
           - npm run test
