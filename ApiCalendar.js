@@ -1,4 +1,3 @@
-const Config = require("../../../apiGoogleconfig.json");
 class ApiCalendar {
     constructor() {
         this.sign = false;
@@ -6,6 +5,8 @@ class ApiCalendar {
         this.onLoadCallback = null;
         this.calendar = 'primary';
         try {
+            this.setApiConfig = this.setApiConfig.bind(this);
+            this.isConfigValid = this.isConfigValid.bind(this);
             this.updateSigninStatus = this.updateSigninStatus.bind(this);
             this.initClient = this.initClient.bind(this);
             this.handleSignoutClick = this.handleSignoutClick.bind(this);
@@ -23,6 +24,37 @@ class ApiCalendar {
         }
     }
     /**
+     * Set configuration.
+     * @param {object} config 
+     */
+    setApiConfig(config) {
+        if (typeof config === 'object') {
+            const stringConfig = JSON.stringify(config);
+            if (this.isConfigValid(stringConfig)) 
+                this.config = config;
+            
+        } else if (typeof config === 'string') {
+            if (this.isConfigValid(config)) 
+                this.config = config;
+
+        }       
+    }
+
+    /**
+     * Test configuration.
+     * @param {string} config 
+     */    
+    isConfigValid(config) {
+        try {
+            JSON.parse(config);
+            return true;
+        } catch (e) {
+            console.log(e);
+            return false;
+        }
+    }
+
+    /**
      * Update connection status.
      * @param {boolean} isSignedIn
      */
@@ -34,7 +66,7 @@ class ApiCalendar {
      */
     initClient() {
         this.gapi = window['gapi'];
-        this.gapi.client.init(Config)
+        this.gapi.client.init(this.config)
             .then(() => {
             // Listen for sign-in state changes.
             this.gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);

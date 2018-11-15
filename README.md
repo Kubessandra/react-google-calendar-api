@@ -21,7 +21,9 @@ import ApiCalendar from 'react-google-calendar-api';
 import ApiCalendar from 'react-google-calendar-api/ApiCalendar';
 ```
 
-Create a file apiGoogleconfig.json in the root directory with your googleApi clientId and ApiKey.
+Custom configuration file. 
+You can place the configurations for your API anywhere on your project folder.
+It is recommended that the file should be in a common configuration file on your application.
 https://console.developers.google.com/flows/enableapi?apiid=calendar.
 
 ```json
@@ -34,6 +36,16 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
 ```
 
 ## Setup
+
+### setApiConfig
+
+```javascript
+    /**
+     * Set configuration.
+     * @param {object} config 
+     */
+    public setApiConfig(config)
+```
 
 ### handleAuthClick:
 
@@ -58,11 +70,13 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
 ```javascript
   import React, {ReactNode, SyntheticEvent} from 'react';
   import ApiCalendar from 'react-google-calendar-api';
+  import config from '@config';
   
   export default class DoubleButton extends React.Component {
       constructor(props) {
         super(props);
         this.handleItemClick = this.handleItemClick.bind(this);
+        ApiCalendar.setApiConfig(config.GOOGLE_API_CONFIG);
       }
       
       public handleItemClick(event: SyntheticEvent<any>, name: string): void {
