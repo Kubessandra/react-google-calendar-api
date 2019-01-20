@@ -1,8 +1,10 @@
+# react-google-calendar-api
+
 ![Build Status](https://travis-ci.com/Insomniiak/react-google-calendar-api.svg?branch=master)
 ![npm (custom registry)](https://img.shields.io/npm/l/express.svg?registry_uri=https%3A%2F%2Fregistry.npmjs.com)
+![npm (downloads)](https://img.shields.io/npm/dy/react-google-calendar-api.svg?style=popout)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/react-google-calendar-api/community?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
-# react-google-calendar-api
 An api to manage your google calendar
 
 ## Install
