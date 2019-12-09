@@ -271,7 +271,6 @@ var ApiCalendar = function () {
          * @returns {any}
          */
 
-    }
     }]);
 
     return ApiCalendar;
