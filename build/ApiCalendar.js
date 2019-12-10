@@ -24,6 +24,8 @@ var ApiCalendar = function () {
             this.handleSignoutClick = this.handleSignoutClick.bind(this);
             this.handleAuthClick = this.handleAuthClick.bind(this);
             this.createEvent = this.createEvent.bind(this);
+            this.getEvent = this.getEvent.bind(this);  //this is what I added
+            this.deleteEvent = this.deleteEvent.bind(this);  //this is what I added
             this.listUpcomingEvents = this.listUpcomingEvents.bind(this);
             this.createEventFromNow = this.createEventFromNow.bind(this);
             this.listenSign = this.listenSign.bind(this);
@@ -225,6 +227,33 @@ var ApiCalendar = function () {
             return this.gapi.client.calendar.events.insert({
                 'calendarId': calendarId,
                 'resource': event
+            });
+        }
+    }, {
+        key: 'getEvent',
+        value: function getEvent(eventId) {
+            var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
+
+            return this.gapi.client.calendar.events.get({
+                'calendarId': calendarId,
+                'eventId': eventId
+            });
+        }
+        /**
+         * Delete Calendar event
+         * @param {string} calendarId for the event.
+         * @param {string} eventId specifies individual event
+         * @returns {any}
+         */
+
+    }, {
+        key: 'deleteEvent',
+        value: function deleteEvent(eventId) {
+            var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
+
+            return this.gapi.client.calendar.events.delete({
+                'calendarId': calendarId,
+                'eventId': eventId
             });
         }
     }]);
