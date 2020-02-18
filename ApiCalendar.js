@@ -1,4 +1,5 @@
-const Config = require("../../../apiGoogleconfig.json");
+const Config = require("../../apiGoogleconfig.json");
+
 class ApiCalendar {
     constructor() {
         this.sign = false;
