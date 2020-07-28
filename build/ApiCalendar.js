@@ -29,6 +29,7 @@ var ApiCalendar = function () {
             this.listenSign = this.listenSign.bind(this);
             this.onLoad = this.onLoad.bind(this);
             this.setCalendar = this.setCalendar.bind(this);
+            this.updateEvent = this.updateEvent.bind(this);
             this.handleClientLoad();
         } catch (e) {
             console.log(e);
@@ -225,6 +226,15 @@ var ApiCalendar = function () {
             return this.gapi.client.calendar.events.insert({
                 'calendarId': calendarId,
                 'resource': event
+            });
+        }
+    }, {
+        key: 'updateEvent',
+        value: function updateEvent(event, eventId, calendarId = this.calendar) {
+            return this.gapi.client.calendar.events.patch({
+                calendarId,
+                eventId,
+                'resource': event,
             });
         }
     }]);
