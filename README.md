@@ -174,7 +174,7 @@ You need to be registered with handleAuthClick.
       });
 ```
 
-### Update Event:
+### Update Event
 
  ```javascript
     /**
