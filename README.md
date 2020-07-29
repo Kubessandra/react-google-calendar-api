@@ -174,6 +174,32 @@ You need to be registered with handleAuthClick.
       });
 ```
 
+### Update Event
+
+ ```javascript
+    /**
+     * Update Calendar event
+     * @param {string} calendarId for the event.
+     * @param {string} eventId of the event.
+     * @param {object} event with details to update, e.g. summary
+     * @returns {any} Promise object with result
+     */
+    public updateEvent(event: object, eventId: string, calendarId: string = this.calendar): any
+ ```
+
+ #### Example
+
+```javascript
+  import ApiCalendar from 'react-google-calendar-api';
+  
+  const event = {
+    summary: 'New Event Title'
+  };
+
+  ApiCalendar.updateEvent(event, '2eo85lmjkkd2i63uo3lhi8a2cq')
+    .then(console.log);
+```
+
 ## Utils
 
 ### listenSign:
