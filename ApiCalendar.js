@@ -16,7 +16,6 @@ class ApiCalendar {
             this.listenSign = this.listenSign.bind(this);
             this.onLoad = this.onLoad.bind(this);
             this.setCalendar = this.setCalendar.bind(this);
-            this.updateEvent = this.updateEvent.bind(this);
             this.handleClientLoad();
         }
         catch (e) {
@@ -172,20 +171,6 @@ class ApiCalendar {
     createEvent(event, calendarId = this.calendar) {
         return this.gapi.client.calendar.events.insert({
             'calendarId': calendarId,
-            'resource': event,
-        });
-    }
-     /**
-     * Update Calendar event
-     * @param {string} calendarId for the event.
-     * @param {string} eventId of the event.
-     * @param {object} event with details to update, e.g. summary
-     * @returns {any}
-     */
-    updateEvent(event, eventId, calendarId = this.calendar) {
-        return this.gapi.client.calendar.events.patch({
-            calendarId,
-            eventId,
             'resource': event,
         });
     }
