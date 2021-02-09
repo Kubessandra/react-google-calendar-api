@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,7 +8,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Config = require("../../../apiGoogleconfig.json");
+var Config = require('../../../apiGoogleconfig.json');
 
 var ApiCalendar = function () {
   function ApiCalendar() {
@@ -17,7 +17,7 @@ var ApiCalendar = function () {
     this.sign = false;
     this.gapi = null;
     this.onLoadCallback = null;
-    this.calendar = "primary";
+    this.calendar = 'primary';
     try {
       this.updateSigninStatus = this.updateSigninStatus.bind(this);
       this.initClient = this.initClient.bind(this);
@@ -45,7 +45,7 @@ var ApiCalendar = function () {
 
 
   _createClass(ApiCalendar, [{
-    key: "updateSigninStatus",
+    key: 'updateSigninStatus',
     value: function updateSigninStatus(isSignedIn) {
       this.sign = isSignedIn;
     }
@@ -54,11 +54,11 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "initClient",
+    key: 'initClient',
     value: function initClient() {
       var _this = this;
 
-      this.gapi = window["gapi"];
+      this.gapi = window['gapi'];
       this.gapi.client.init(Config).then(function () {
         // Listen for sign-in state changes.
         _this.gapi.auth2.getAuthInstance().isSignedIn.listen(_this.updateSigninStatus);
@@ -77,16 +77,16 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "handleClientLoad",
+    key: 'handleClientLoad',
     value: function handleClientLoad() {
       var _this2 = this;
 
-      this.gapi = window["gapi"];
-      var script = document.createElement("script");
-      script.src = "https://apis.google.com/js/api.js";
+      this.gapi = window['gapi'];
+      var script = document.createElement('script');
+      script.src = 'https://apis.google.com/js/api.js';
       document.body.appendChild(script);
       script.onload = function () {
-        window["gapi"].load("client:auth2", _this2.initClient);
+        window['gapi'].load('client:auth2', _this2.initClient);
       };
     }
     /**
@@ -94,12 +94,12 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "handleAuthClick",
+    key: 'handleAuthClick',
     value: function handleAuthClick() {
       if (this.gapi) {
         this.gapi.auth2.getAuthInstance().signIn();
       } else {
-        console.log("Error: this.gapi not loaded");
+        console.log('Error: this.gapi not loaded');
       }
     }
     /**
@@ -108,7 +108,7 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "setCalendar",
+    key: 'setCalendar',
     value: function setCalendar(newCalendar) {
       this.calendar = newCalendar;
     }
@@ -118,12 +118,12 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "listenSign",
+    key: 'listenSign',
     value: function listenSign(callback) {
       if (this.gapi) {
         this.gapi.auth2.getAuthInstance().isSignedIn.listen(callback);
       } else {
-        console.log("Error: this.gapi not loaded");
+        console.log('Error: this.gapi not loaded');
       }
     }
     /**
@@ -132,7 +132,7 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "onLoad",
+    key: 'onLoad',
     value: function onLoad(callback) {
       if (this.gapi) {
         callback();
@@ -145,12 +145,12 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "handleSignoutClick",
+    key: 'handleSignoutClick',
     value: function handleSignoutClick() {
       if (this.gapi) {
         this.gapi.auth2.getAuthInstance().signOut();
       } else {
-        console.log("Error: this.gapi not loaded");
+        console.log('Error: this.gapi not loaded');
       }
     }
     /**
@@ -161,7 +161,7 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "listUpcomingEvents",
+    key: 'listUpcomingEvents',
     value: function listUpcomingEvents(maxResults) {
       var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
 
@@ -172,10 +172,10 @@ var ApiCalendar = function () {
           showDeleted: false,
           singleEvents: true,
           maxResults: maxResults,
-          orderBy: "startTime"
+          orderBy: 'startTime'
         });
       } else {
-        console.log("Error: this.gapi not loaded");
+        console.log('Error: this.gapi not loaded');
         return false;
       }
     }
@@ -190,14 +190,14 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "createEventFromNow",
+    key: 'createEventFromNow',
     value: function createEventFromNow(_ref) {
       var time = _ref.time,
           summary = _ref.summary,
           _ref$description = _ref.description,
-          description = _ref$description === undefined ? "" : _ref$description;
+          description = _ref$description === undefined ? '' : _ref$description;
       var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
-      var timeZone = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "Europe/Paris";
+      var timeZone = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'Europe/Paris';
 
       var event = {
         summary: summary,
@@ -221,7 +221,7 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "createEvent",
+    key: 'createEvent',
     value: function createEvent(event) {
       var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
 
@@ -231,7 +231,7 @@ var ApiCalendar = function () {
           resource: event
         });
       } else {
-        console.log("Error: gapi is not loaded use onLoad before please.");
+        console.log('Error: gapi is not loaded use onLoad before please.');
         return null;
       }
     }
@@ -244,7 +244,7 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "deleteEvent",
+    key: 'deleteEvent',
     value: function deleteEvent(eventId) {
       var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
 
@@ -254,7 +254,7 @@ var ApiCalendar = function () {
           eventId: eventId
         });
       } else {
-        console.log("Error: gapi is not loaded use onLoad before please.");
+        console.log('Error: gapi is not loaded use onLoad before please.');
         return null;
       }
     }
@@ -264,12 +264,12 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "getBasicUserProfile",
+    key: 'getBasicUserProfile',
     value: function getBasicUserProfile() {
       if (this.gapi) {
         return this.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile();
       } else {
-        console.log("Error: gapi is not loaded use onLoad before please.");
+        console.log('Error: gapi is not loaded use onLoad before please.');
         return null;
       }
     }
@@ -283,7 +283,7 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "updateEvent",
+    key: 'updateEvent',
     value: function updateEvent(event, eventId) {
       var calendarId = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.calendar;
 
@@ -294,7 +294,7 @@ var ApiCalendar = function () {
           resource: event
         });
       } else {
-        console.log("Error: gapi is not loaded use onLoad before please.");
+        console.log('Error: gapi is not loaded use onLoad before please.');
         return null;
       }
     }
@@ -307,7 +307,7 @@ var ApiCalendar = function () {
      */
 
   }, {
-    key: "getEvent",
+    key: 'getEvent',
     value: function getEvent(eventId) {
       var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
 
@@ -317,7 +317,7 @@ var ApiCalendar = function () {
           eventId: eventId
         });
       } else {
-        console.log("Error: gapi is not loaded use onLoad before please.");
+        console.log('Error: gapi is not loaded use onLoad before please.');
         return null;
       }
     }

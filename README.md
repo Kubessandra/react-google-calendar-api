@@ -140,10 +140,10 @@ You need to be registered with handleAuthClick.
 #### Example
 
 ```javascript
-import ApiCalendar from "react-google-calendar-api";
+import ApiCalendar from 'react-google-calendar-api';
 
 const eventFromNow: object = {
-  summary: "Poc Dev From Now",
+  summary: 'Poc Dev From Now',
   time: 480,
 };
 
@@ -171,7 +171,7 @@ ApiCalendar.createEventFromNow(eventFromNow)
 #### Example
 
 ```javascript
-import ApiCalendar from "react-google-calendar-api";
+import ApiCalendar from 'react-google-calendar-api';
 
 if (ApiCalendar.sign)
   ApiCalendar.listUpcomingEvents(10).then(({ result }: any) => {
@@ -192,6 +192,18 @@ if (ApiCalendar.sign)
    public updateEvent(event: object, eventId: string, calendarId: string = this.calendar): any
 ```
 
+#### Example
+
+```javascript
+import ApiCalendar from 'react-google-calendar-api';
+
+const event = {
+  summary: 'New Event Title',
+};
+
+ApiCalendar.updateEvent(event, '2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
+```
+
 ### Delete Event
 
 ```javascript
@@ -202,6 +214,14 @@ if (ApiCalendar.sign)
    * @returns {any} Promise resolved when the event is deleted.
    */
    public deleteEvent(eventId: string, calendarId: string = this.calendar): any
+```
+
+#### Example
+
+```javascript
+import ApiCalendar from 'react-google-calendar-api';
+
+ApiCalendar.deleteEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 ```
 
 ### Get Event
@@ -216,6 +236,14 @@ if (ApiCalendar.sign)
    public getEvent(eventId: string, calendarId: string = this.calendar): any
 ```
 
+#### Example
+
+```javascript
+import ApiCalendar from 'react-google-calendar-api';
+
+ApiCalendar.getEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
+```
+
 ### Get BasicUserProfile Event
 
 ```javascript
@@ -226,16 +254,23 @@ if (ApiCalendar.sign)
    public getBasicUserProfile(): any
 ```
 
-#### Example
+#### Examples
 
 ```javascript
-import ApiCalendar from "react-google-calendar-api";
+import ApiCalendar from 'react-google-calendar-api';
 
-const event = {
-  summary: "New Event Title",
-};
+ApiCalendar.getBasicUserProfile('2eo85lmjkkd2i63uo3lhi8a2cq').getEmail().then(console.log);
 
-ApiCalendar.updateEvent(event, "2eo85lmjkkd2i63uo3lhi8a2cq").then(console.log);
+ApiCalendar.getBasicUserProfile('2eo85lmjkkd2i63uo3lhi8a2cq').getName().then(console.log);
+```
+### or with async/wait
+
+```javascript
+import ApiCalendar from 'react-google-calendar-api';
+
+const response = await ApiCalendar.getBasicUserProfile();
+
+response.getEmail();
 ```
 
 ## Utils
