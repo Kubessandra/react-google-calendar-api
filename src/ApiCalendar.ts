@@ -208,7 +208,7 @@ class ApiCalendar {
    * @param {string} calendarId where the event is.
    * @returns {any} Promise resolved when the event is deleted.
    */
-  deleteEvent(eventId: string, calendarId: string = this.calendar) {
+  deleteEvent(eventId: string, calendarId: string = this.calendar): any {
     if (this.gapi) {
       return this.gapi.client.calendar.events.delete({
         calendarId: calendarId,
@@ -223,7 +223,7 @@ class ApiCalendar {
   /**
    * @returns {any} Get the user's basic profile information. Documentation: https://developers.google.com/identity/sign-in/web/reference#googleusergetbasicprofile
    */
-  getBasicUserProfile() {
+  getBasicUserProfile(): any {
     if (this.gapi) {
       return this.gapi.auth2
         .getAuthInstance()
@@ -246,7 +246,7 @@ class ApiCalendar {
     event: object,
     eventId: string,
     calendarId: string = this.calendar
-  ) {
+  ): any {
     if (this.gapi) {
       return this.gapi.client.calendar.events.patch({
         calendarId: calendarId,
@@ -266,7 +266,7 @@ class ApiCalendar {
    * @returns {any}
    */
 
-  getEvent(eventId: string, calendarId: string = this.calendar) {
+  getEvent(eventId: string, calendarId: string = this.calendar): any {
     if (this.gapi) {
       return this.gapi.client.calendar.events.get({
         calendarId: calendarId,
