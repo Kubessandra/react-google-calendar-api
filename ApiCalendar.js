@@ -12,6 +12,7 @@ class ApiCalendar {
             this.handleAuthClick = this.handleAuthClick.bind(this);
             this.createEvent = this.createEvent.bind(this);
             this.listUpcomingEvents = this.listUpcomingEvents.bind(this);
+            this.listEvents = this.listEvents.bind(this);
             this.createEventFromNow = this.createEventFromNow.bind(this);
             this.listenSign = this.listenSign.bind(this);
             this.onLoad = this.onLoad.bind(this);
@@ -133,6 +134,24 @@ class ApiCalendar {
         }
         else {
             console.log("Error: this.gapi not loaded");
+            return false;
+        }
+    }
+    /**
+     * List all events in the calendar queried by custom query options
+     * See all available options here https://developers.google.com/calendar/v3/reference/events/list
+     * @param {object} queryOptions to see
+     * @param {string} calendarId to see by default use the calendar attribute
+     * @returns {any}
+     */
+    listEvents(queryOptions, calendarId = this.calendar) {
+        if (this.gapi) {
+            return this.gapi.client.calendar.events.list({
+                calendarId,
+                ...queryOptions
+            });
+        } else {
+            console.log('Error: this.gapi not loaded');
             return false;
         }
     }
