@@ -144,7 +144,6 @@ class ApiCalendar {
             return false;
         }
     }
-
     /**
      * List all events in the calendar queried by custom query options
      * See all available options here https://developers.google.com/calendar/v3/reference/events/list
@@ -154,16 +153,13 @@ class ApiCalendar {
      */
     listEvents(queryOptions, calendarId = this.calendar) {
         if (this.gapi) {
-            return this.gapi.client.calendar.events.list({
-                calendarId,
-                ...queryOptions
-            });
-        } else {
+            return this.gapi.client.calendar.events.list(Object.assign({ calendarId }, queryOptions));
+        }
+        else {
             console.log('Error: this.gapi not loaded');
             return false;
         }
     }
-    
     /**
      * Create an event from the current time for a certain period
      * @param {number} time in minutes for the event
