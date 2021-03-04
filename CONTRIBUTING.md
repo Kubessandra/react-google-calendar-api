@@ -13,7 +13,7 @@ Please note we have a code of conduct, please follow it in all your interactions
 
 
 **2** - Each Pull Request should have its own issue created and referenced in every commit. All branches
-   should start from `development` branch. Naming convention for the issue is `[(THEME)] (TITLE)` and Branch Naming
+   should start from `master` branch. Naming convention for the issue is `[(THEME)] (TITLE)` and Branch Naming
    should be `(TYPE)/(PROJECT_ID)-(ISSUE_NUMBER)-(TITLE)`. As an example, if you want to add
    something related with Redux, Issue name can be `[Redux] Add Reducer`, and Branch should be
    (saying the issue number is 42) `feature/RGCA-42-add-reducer`. The github pull request title should be
