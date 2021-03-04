@@ -179,6 +179,32 @@ if (ApiCalendar.sign)
   });
 ```
 
+### List All Events:
+```javascript
+    /**
+     * List all events in the calendar queried by custom query options
+     * See all available options here https://developers.google.com/calendar/v3/reference/events/list
+     * @param {object} queryOptions to see
+     * @param {string} calendarId to see by default use the calendar attribute
+     * @returns {any}
+     */
+    public listEvents(queryOptions, calendarId = this.calendar): any
+```
+#### Example
+```javascript
+import ApiCalendar from 'react-google-calendar-api';
+if (ApiCalendar.sign)
+  ApiCalendar.listEvents({
+      timeMin: new Date()..toISOString(),
+      timeMax: new Date().addDays(10).toISOString(),
+      showDeleted: true,
+      maxResults: 10,
+      orderBy: 'updated'
+  }).then(({ result }: any) => {
+    console.log(result.items);
+  });
+```
+
 ### Update Event
 
 ```javascript
