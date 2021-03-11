@@ -117,9 +117,10 @@ You need to be registered with handleAuthClick.
     * Create calendar event
     * @param {string} CalendarId for the event by default use 'primary'.
     * @param {object} Event with start and end dateTime
+    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
     * @returns {any} Promise on the event.
     */
-   public createEvent(event: object, calendarId: string = this.calendar): any {
+   public createEvent(event: object, sendUpdates = boolean, calendarId: string = this.calendar): any {
 ```
 
 ### Create Event From Now:
