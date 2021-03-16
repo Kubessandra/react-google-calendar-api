@@ -208,13 +208,15 @@ class ApiCalendar {
    * Create Calendar event
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
+   * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
    * @returns {any}
    */
-  public createEvent(event: object, calendarId: string = this.calendar): any {
+  public createEvent(event: object, calendarId: string = this.calendar, sendUpdates?: string ): any {
     if (this.gapi) {
       return this.gapi.client.calendar.events.insert({
         calendarId: calendarId,
         resource: event,
+        sendUpdates: sendUpdates,
       });
     } else {
       console.log('Error: this.gapi not loaded');
@@ -260,18 +262,21 @@ class ApiCalendar {
    * @param {string} calendarId for the event.
    * @param {string} eventId of the event.
    * @param {object} event with details to update, e.g. summary
+   * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
    * @returns {any}
    */
   updateEvent(
     event: object,
     eventId: string,
-    calendarId: string = this.calendar
+    calendarId: string = this.calendar,
+    sendUpdates?: string,
   ): any {
     if (this.gapi) {
       return this.gapi.client.calendar.events.patch({
         calendarId: calendarId,
         eventId: eventId,
         resource: event,
+        sendUpdates: sendUpdates,
       });
     } else {
       console.log('Error: gapi is not loaded use onLoad before please.');

@@ -120,7 +120,7 @@ You need to be registered with handleAuthClick.
     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
     * @returns {any} Promise on the event.
     */
-   public createEvent(event: object, sendUpdates = string, calendarId: string = this.calendar): any {
+   public createEvent(event: object, calendarId: string = this.calendar, sendUpdates = string,): any {
 ```
 
 ### Create Event From Now:

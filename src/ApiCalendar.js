@@ -188,15 +188,13 @@ class ApiCalendar {
      * Create Calendar event
      * @param {string} calendarId for the event.
      * @param {object} event with start and end dateTime
-     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
      * @returns {any}
      */
-    createEvent(event, sendUpdates = false, calendarId = this.calendar) {
+    createEvent(event, calendarId = this.calendar) {
         if (this.gapi) {
             return this.gapi.client.calendar.events.insert({
                 calendarId: calendarId,
                 resource: event,
-                sendUpdates: sendUpdates,
             });
         }
         else {
@@ -241,17 +239,15 @@ class ApiCalendar {
      * Update Calendar event
      * @param {string} calendarId for the event.
      * @param {string} eventId of the event.
-     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
      * @param {object} event with details to update, e.g. summary
      * @returns {any}
      */
-    updateEvent(event, eventId, sendUpdates = false, calendarId = this.calendar) {
+    updateEvent(event, eventId, calendarId = this.calendar) {
         if (this.gapi) {
             return this.gapi.client.calendar.events.patch({
                 calendarId: calendarId,
                 eventId: eventId,
                 resource: event,
-                sendUpdates: sendUpdates,
             });
         }
         else {
