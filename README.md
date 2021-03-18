@@ -120,7 +120,7 @@ You need to be registered with handleAuthClick.
     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
     * @returns {any} Promise on the event.
     */
-   public createEvent(event: object, calendarId: string = this.calendar, sendUpdates = string,): any {
+   public createEvent(event: object, calendarId: string = this.calendar, sendUpdates: string = 'none',): any {
 ```
 
 ### Create Event From Now:
@@ -214,9 +214,10 @@ if (ApiCalendar.sign)
     * @param {string} calendarId for the event.
     * @param {string} eventId of the event.
     * @param {object} event with details to update, e.g. summary
+    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
     * @returns {any} Promise object with result
     */
-   public updateEvent(event: object, eventId: string, calendarId: string = this.calendar): any
+   public updateEvent(event: object, eventId: string, calendarId: string = this.calendar, sendUpdates: string = 'none'): any
 ```
 
 #### Example

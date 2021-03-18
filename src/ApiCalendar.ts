@@ -211,7 +211,7 @@ class ApiCalendar {
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
    * @returns {any}
    */
-  public createEvent(event: object, calendarId: string = this.calendar, sendUpdates?: string ): any {
+  public createEvent(event: object, calendarId: string = this.calendar, sendUpdates: string = 'none' ): any {
     if (this.gapi) {
       return this.gapi.client.calendar.events.insert({
         calendarId: calendarId,
@@ -269,7 +269,7 @@ class ApiCalendar {
     event: object,
     eventId: string,
     calendarId: string = this.calendar,
-    sendUpdates?: string,
+    sendUpdates: string = 'none',
   ): any {
     if (this.gapi) {
       return this.gapi.client.calendar.events.patch({
