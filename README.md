@@ -74,7 +74,7 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
 
       public handleItemClick(event: SyntheticEvent<any>, name: string): void {
         if (name === 'sign-in') {
-          ApiCalendar.handleAuthClick();
+          ApiCalendar.handleAuthClick()
           .then(() => {
             console.log('sign in succesful!');
           })
