@@ -48,7 +48,7 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
      * Sign in with a Google account.
      * @returns {any} A Promise that is fulfilled with the GoogleUser instance when the user successfully authenticates and grants the requested scopes, or rejected with an object containing an error property if an error happened
      */
-    public handleAuthClick(): any
+    public handleAuthClick(): Promise<any>
 ```
 
 ### handleSignOutClick:
