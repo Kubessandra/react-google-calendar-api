@@ -79,7 +79,7 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
             console.log('sign in succesful!');
           })
           .catch((e) => {
-            `sign in failed ${e}`
+            console.error(`sign in failed ${e}`);
           })
         } else if (name === 'sign-out') {
           ApiCalendar.handleSignoutClick();
