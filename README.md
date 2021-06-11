@@ -76,7 +76,7 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
         if (name === 'sign-in') {
           ApiCalendar.handleAuthClick();
           .then(() => {
-            'sign in succesful!'
+            console.log('sign in succesful!');
           })
           .catch((e) => {
             `sign in failed ${e}`
