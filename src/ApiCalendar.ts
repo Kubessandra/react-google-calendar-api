@@ -79,7 +79,7 @@ class ApiCalendar {
   /**
    * Sign in Google user account
    */
-   public handleAuthClick(): any {
+   public handleAuthClick(): Promise<any> {
       if (this.gapi) {
           return this.gapi.auth2.getAuthInstance().signIn();
       } else {
