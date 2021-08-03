@@ -248,10 +248,11 @@ var ApiCalendar = function () {
     key: 'createEvent',
     value: function createEvent(event) {
       var calendarId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.calendar;
-
+      var conferenceDataVersion = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.conferenceDataVersion;
       if (this.gapi) {
         return this.gapi.client.calendar.events.insert({
           calendarId: calendarId,
+          conferenceDataVersion: conferenceDataVersion,
           resource: event
         });
       } else {
