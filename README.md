@@ -46,8 +46,9 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
 ```javascript
     /**
      * Sign in with a Google account.
+     * @returns {any} A Promise that is fulfilled with the GoogleUser instance when the user successfully authenticates and grants the requested scopes, or rejected with an object containing an error property if an error happened
      */
-    public handleAuthClick(): void
+    public handleAuthClick(): Promise<any>
 ```
 
 ### handleSignOutClick:
@@ -73,7 +74,13 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
 
       public handleItemClick(event: SyntheticEvent<any>, name: string): void {
         if (name === 'sign-in') {
-          ApiCalendar.handleAuthClick();
+          ApiCalendar.handleAuthClick()
+          .then(() => {
+            console.log('sign in succesful!');
+          })
+          .catch((e) => {
+            console.error(`sign in failed ${e}`);
+          })
         } else if (name === 'sign-out') {
           ApiCalendar.handleSignoutClick();
         }

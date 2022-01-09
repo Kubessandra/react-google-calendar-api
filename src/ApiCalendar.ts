@@ -79,12 +79,13 @@ class ApiCalendar {
   /**
    * Sign in Google user account
    */
-  public handleAuthClick(): void {
-    if (this.gapi) {
-      this.gapi.auth2.getAuthInstance().signIn();
-    } else {
-      console.log('Error: this.gapi not loaded');
-    }
+   public handleAuthClick(): Promise<any> {
+      if (this.gapi) {
+          return this.gapi.auth2.getAuthInstance().signIn();
+      } else {
+          console.log('Error: this.gapi not loaded')
+          return Promise.reject(new Error('Error: this.gapi not loaded'));
+      }
   }
 
   /**
