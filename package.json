@@ -1,6 +1,6 @@
 {
   "name": "react-google-calendar-api",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "An api to manage your google calendar",
   "main": "./build/src/ApiCalendar.js",
   "scripts": {
