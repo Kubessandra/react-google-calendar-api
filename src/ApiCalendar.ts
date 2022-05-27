@@ -1,4 +1,11 @@
-const Config = require('../../../apiGoogleconfig.json');
+const config = {
+  "clientId": "481002342759-ang9nelaam4odkqrn9q9gpgu1qit50h5.apps.googleusercontent.com",
+  "apiKey": "AIzaSyCaK5d-fjcZw1AviRtGlbK4ef1DlEquQ_w",
+  "scope": "https://www.googleapis.com/auth/calendar",
+  "discoveryDocs": [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+  ]
+}
 
 class ApiCalendar {
   sign: boolean = false;
@@ -43,7 +50,7 @@ class ApiCalendar {
   private initClient(): void {
     this.gapi = window['gapi'];
     this.gapi.client
-      .init(Config)
+      .init(config)
       .then(() => {
         // Listen for sign-in state changes.
         this.gapi.auth2
