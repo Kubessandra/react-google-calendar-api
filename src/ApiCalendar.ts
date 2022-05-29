@@ -45,12 +45,12 @@ class ApiCalendar {
         discoveryDocs: this.config.discoveryDocs,
         hosted_domain: this.config.hosted_domain
       })
-      .then(() => {
+      .then((): void => {
         if (this.onLoadCallback) {
           this.onLoadCallback();
         }
       })
-      .catch((e: any) => {
+      .catch((e: any): void => {
         console.log(e);
       });
   }
@@ -129,7 +129,7 @@ class ApiCalendar {
       const token = gapi.client.getToken();
       if (token !== null) {
         google.accounts.id.disableAutoSelect();
-        google.accounts.oauth2.revoke(token.access_token, () => {});
+        google.accounts.oauth2.revoke(token.access_token, (): void => {});
         gapi.client.setToken(null)
       }
     } else {

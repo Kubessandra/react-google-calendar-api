@@ -6,7 +6,7 @@
   "types": "./dist/ApiCalendar.d.ts",
   "scripts": {
     "build": "tslint --project . && tsup src/ApiCalendar.ts --dts",
-    "dev": "tsc --watch",
+    "dev": "tsup src/ApiCalendar.ts --dts --watch",
     "test": "jest"
   },
   "jest": {
