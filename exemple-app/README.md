@@ -8,7 +8,8 @@ cd .. && yarn build && yarn link
 cd ./exemple-app && yarn link react-google-calendar-api
 ```
 
-Complete the .env file with your credentials.
+Create a .env file with your credentials.
+You have an exemple in the `.env.example`
 
-Start the exemple:
+Start the example:
 `yarn start`
