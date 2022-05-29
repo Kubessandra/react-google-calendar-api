@@ -48,7 +48,7 @@ const apiCalendar = new ApiCalendar(config)
      * Sign in with a Google account.
      * @returns {any} A Promise that is fulfilled with the GoogleUser instance when the user successfully authenticates and grants the requested scopes, or rejected with an object containing an error property if an error happened
      */
-    public handleAuthClick(): Promise<any>
+    public handleAuthClick(): void
 ```
 
 ### handleSignOutClick:
@@ -86,12 +86,6 @@ const apiCalendar = new ApiCalendar(config)
       public handleItemClick(event: SyntheticEvent<any>, name: string): void {
         if (name === 'sign-in') {
           apiCalendar.handleAuthClick()
-          .then(() => {
-            console.log('sign in succesful!');
-          })
-          .catch((e) => {
-            console.error(`sign in failed ${e}`);
-          })
         } else if (name === 'sign-out') {
           apiCalendar.handleSignoutClick();
         }
