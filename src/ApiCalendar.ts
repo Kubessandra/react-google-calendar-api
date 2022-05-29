@@ -1,65 +1,51 @@
-const config = {
-  "clientId": "481002342759-ang9nelaam4odkqrn9q9gpgu1qit50h5.apps.googleusercontent.com",
-  "apiKey": "AIzaSyCaK5d-fjcZw1AviRtGlbK4ef1DlEquQ_w",
-  "scope": "https://www.googleapis.com/auth/calendar",
-  "discoveryDocs": [
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
-  ]
-}
+import {
+  ConfigApiCalendar,
+  TimeCalendarType,
+} from './type';
+
+const scriptSrcGoogle = "https://accounts.google.com/gsi/client"
+const scriptSrcGapi = "https://apis.google.com/js/api.js"
 
 class ApiCalendar {
-  sign: boolean = false;
-  gapi: any = null;
+  tokenClient: google.accounts.oauth2.TokenClient | null = null;
   onLoadCallback: any = null;
   calendar: string = 'primary';
 
-  constructor() {
+  constructor(public config: ConfigApiCalendar) {
     try {
-      this.updateSigninStatus = this.updateSigninStatus.bind(this);
-      this.initClient = this.initClient.bind(this);
+      this.initGapiClient = this.initGapiClient.bind(this);
       this.handleSignoutClick = this.handleSignoutClick.bind(this);
       this.handleAuthClick = this.handleAuthClick.bind(this);
       this.createEvent = this.createEvent.bind(this);
       this.listUpcomingEvents = this.listUpcomingEvents.bind(this);
       this.listEvents = this.listEvents.bind(this);
       this.createEventFromNow = this.createEventFromNow.bind(this);
-      this.listenSign = this.listenSign.bind(this);
       this.onLoad = this.onLoad.bind(this);
       this.setCalendar = this.setCalendar.bind(this);
       this.updateEvent = this.updateEvent.bind(this);
       this.deleteEvent = this.deleteEvent.bind(this);
       this.getEvent = this.getEvent.bind(this);
-      this.getBasicUserProfile = this.getBasicUserProfile.bind(this);
       this.handleClientLoad();
     } catch (e) {
       console.log(e);
     }
   }
 
-  /**
-   * Update connection status.
-   * @param {boolean} isSignedIn
-   */
-  private updateSigninStatus(isSignedIn: boolean): void {
-    this.sign = isSignedIn;
+  get sign(): boolean {
+    return !!this.tokenClient;
   }
 
   /**
    * Auth to the google Api.
    */
-  private initClient(): void {
-    this.gapi = window['gapi'];
-    this.gapi.client
-      .init(config)
+  private initGapiClient(): void {
+    gapi.client
+      .init({
+        apiKey: this.config.apiKey,
+        discoveryDocs: this.config.discoveryDocs,
+        hosted_domain: this.config.hosted_domain
+      })
       .then(() => {
-        // Listen for sign-in state changes.
-        this.gapi.auth2
-          .getAuthInstance()
-          .isSignedIn.listen(this.updateSigninStatus);
-        // Handle the initial sign-in state.
-        this.updateSigninStatus(
-          this.gapi.auth2.getAuthInstance().isSignedIn.get()
-        );
         if (this.onLoadCallback) {
           this.onLoadCallback();
         }
@@ -74,25 +60,45 @@ class ApiCalendar {
    * And create gapi in global
    */
   private handleClientLoad(): void {
-    this.gapi = window['gapi'];
-    const script = document.createElement('script');
-    script.src = 'https://apis.google.com/js/api.js';
-    document.body.appendChild(script);
-    script.onload = (): void => {
-      window['gapi'].load('client:auth2', this.initClient);
+    const scriptGoogle = document.createElement('script');
+    const scriptGapi = document.createElement('script');
+    scriptGoogle.src = scriptSrcGoogle;
+    scriptGoogle.async = true;
+    scriptGoogle.defer = true;
+    scriptGapi.src = scriptSrcGapi;
+    scriptGapi.async = true;
+    scriptGapi.defer = true;
+    document.body.appendChild(scriptGapi);
+    document.body.appendChild(scriptGoogle);
+    scriptGapi.onload = (): void => {
+      gapi.load('client', this.initGapiClient);
+    };
+    scriptGoogle.onload = async (): Promise<void> => {
+      this.tokenClient = await google.accounts.oauth2.initTokenClient({
+        client_id: this.config.clientId,
+        scope: this.config.scope,
+        prompt: '',
+        callback: (): void => {},
+      });
     };
   }
 
   /**
    * Sign in Google user account
    */
-   public handleAuthClick(): Promise<any> {
-      if (this.gapi) {
-          return this.gapi.auth2.getAuthInstance().signIn();
+  public handleAuthClick(): void {
+    if (gapi && this.tokenClient) {
+      if (gapi.client.getToken() === null) {
+        this.tokenClient.requestAccessToken({ prompt: 'consent' });
       } else {
-          console.log('Error: this.gapi not loaded')
-          return Promise.reject(new Error('Error: this.gapi not loaded'));
+        this.tokenClient.requestAccessToken({
+          prompt: '',
+        });
       }
+    } else {
+      console.error('Error: this.gapi not loaded');
+      new Error('Error: this.gapi not loaded')
+    }
   }
 
   /**
@@ -104,23 +110,11 @@ class ApiCalendar {
   }
 
   /**
-   * Execute the callback function when a user is disconnected or connected with the sign status.
-   * @param callback
-   */
-  public listenSign(callback: any): void {
-    if (this.gapi) {
-      this.gapi.auth2.getAuthInstance().isSignedIn.listen(callback);
-    } else {
-      console.log('Error: this.gapi not loaded');
-    }
-  }
-
-  /**
    * Execute the callback function when gapi is loaded
    * @param callback
    */
   public onLoad(callback: any): void {
-    if (this.gapi) {
+    if (gapi) {
       callback();
     } else {
       this.onLoadCallback = callback;
@@ -131,10 +125,15 @@ class ApiCalendar {
    * Sign out user google account
    */
   public handleSignoutClick(): void {
-    if (this.gapi) {
-      this.gapi.auth2.getAuthInstance().signOut();
+    if (gapi) {
+      const token = gapi.client.getToken();
+      if (token !== null) {
+        google.accounts.id.disableAutoSelect();
+        google.accounts.oauth2.revoke(token.access_token, () => {});
+        gapi.client.setToken(null)
+      }
     } else {
-      console.log('Error: this.gapi not loaded');
+      console.error('Error: this.gapi not loaded');
     }
   }
 
@@ -146,10 +145,10 @@ class ApiCalendar {
    */
   public listUpcomingEvents(
     maxResults: number,
-    calendarId: string = this.calendar
+    calendarId: string = this.calendar,
   ): any {
-    if (this.gapi) {
-      return this.gapi.client.calendar.events.list({
+    if (gapi) {
+      return gapi.client.calendar.events.list({
         calendarId: calendarId,
         timeMin: new Date().toISOString(),
         showDeleted: false,
@@ -158,7 +157,7 @@ class ApiCalendar {
         orderBy: 'startTime',
       });
     } else {
-      console.log('Error: this.gapi not loaded');
+      console.error('Error: this.gapi not loaded');
       return false;
     }
   }
@@ -170,15 +169,18 @@ class ApiCalendar {
    * @param {string} calendarId to see by default use the calendar attribute
    * @returns {any}
    */
-  public listEvents(queryOptions: object,calendarId: string = this.calendar): any {
-    if (this.gapi) {
-        return this.gapi.client.calendar.events.list({
-            calendarId,
-            ...queryOptions
-        });
+  public listEvents(
+    queryOptions: object,
+    calendarId: string = this.calendar,
+  ): any {
+    if (gapi) {
+      return gapi.client.calendar.events.list({
+        calendarId,
+        ...queryOptions,
+      });
     } else {
-        console.log('Error: this.gapi not loaded');
-        return false;
+      console.error('Error: gapi not loaded');
+      return false;
     }
   }
 
@@ -194,7 +196,7 @@ class ApiCalendar {
   public createEventFromNow(
     { time, summary, description = '' }: any,
     calendarId: string = this.calendar,
-    timeZone: string = 'Europe/Paris'
+    timeZone: string = 'Europe/Paris',
   ): any {
     const event = {
       summary,
@@ -204,7 +206,7 @@ class ApiCalendar {
         timeZone: timeZone,
       },
       end: {
-        dateTime: new Date(new Date().getTime() + time * 60000),
+        dateTime: new Date(new Date().getTime() + time * 60000).toISOString(),
         timeZone: timeZone,
       },
     };
@@ -219,15 +221,20 @@ class ApiCalendar {
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
    * @returns {any}
    */
-  public createEvent(event: object, calendarId: string = this.calendar, sendUpdates: string = 'none' ): any {
-    if (this.gapi) {
-      return this.gapi.client.calendar.events.insert({
+  public createEvent(
+    event: { end: TimeCalendarType; start: TimeCalendarType },
+    calendarId: string = this.calendar,
+    sendUpdates: 'all' | 'externalOnly' | 'none' = 'none',
+  ): any {
+    if (gapi.client.getToken()) {
+      return gapi.client.calendar.events.insert({
         calendarId: calendarId,
         resource: event,
+        //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
         sendUpdates: sendUpdates,
       });
     } else {
-      console.log('Error: this.gapi not loaded');
+      console.error('Error: this.gapi not loaded');
       return false;
     }
   }
@@ -239,28 +246,13 @@ class ApiCalendar {
    * @returns {any} Promise resolved when the event is deleted.
    */
   deleteEvent(eventId: string, calendarId: string = this.calendar): any {
-    if (this.gapi) {
-      return this.gapi.client.calendar.events.delete({
+    if (gapi) {
+      return gapi.client.calendar.events.delete({
         calendarId: calendarId,
         eventId: eventId,
       });
     } else {
-      console.log('Error: gapi is not loaded use onLoad before please.');
-      return null;
-    }
-  }
-
-  /**
-   * @returns {any} Get the user's basic profile information. Documentation: https://developers.google.com/identity/sign-in/web/reference#googleusergetbasicprofile
-   */
-  getBasicUserProfile(): any {
-    if (this.gapi) {
-      return this.gapi.auth2
-        .getAuthInstance()
-        .currentUser.get()
-        .getBasicProfile();
-    } else {
-      console.log('Error: gapi is not loaded use onLoad before please.');
+      console.error('Error: gapi is not loaded use onLoad before please.');
       return null;
     }
   }
@@ -279,15 +271,16 @@ class ApiCalendar {
     calendarId: string = this.calendar,
     sendUpdates: string = 'none',
   ): any {
-    if (this.gapi) {
-      return this.gapi.client.calendar.events.patch({
+    if (gapi) {
+      //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/patch)
+      return gapi.client.calendar.events.patch({
         calendarId: calendarId,
         eventId: eventId,
         resource: event,
         sendUpdates: sendUpdates,
       });
     } else {
-      console.log('Error: gapi is not loaded use onLoad before please.');
+      console.error('Error: gapi is not loaded use onLoad before please.');
       return null;
     }
   }
@@ -300,22 +293,16 @@ class ApiCalendar {
    */
 
   getEvent(eventId: string, calendarId: string = this.calendar): any {
-    if (this.gapi) {
-      return this.gapi.client.calendar.events.get({
+    if (gapi) {
+      return gapi.client.calendar.events.get({
         calendarId: calendarId,
         eventId: eventId,
       });
     } else {
-      console.log('Error: gapi is not loaded use onLoad before please.');
+      console.error('Error: gapi is not loaded use onLoad before please.');
       return null;
     }
   }
 }
 
-let apiCalendar;
-try {
-  apiCalendar = new ApiCalendar();
-} catch (e) {
-  console.log(e);
-}
-export default apiCalendar;
+export default ApiCalendar;

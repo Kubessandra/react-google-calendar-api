@@ -9,27 +9,25 @@ An api to manage your google calendar
 
 ## Install
 
+Npm
 ```
 npm install --save react-google-calendar-api
 ```
 
-## Use
-
+yarn
 ```
+yarn add react-google-calendar-api
+```
+
+## Use (Javascript / Typescript)
+
+You will need to enable the "Google Calendar API"(https://console.developers.google.com/flows/enableapi?apiid=calendar.)
+You will need a clientId and ApiKey from Google(https://developers.google.com/workspace/guides/create-credentials)
+
+```javascript
 import ApiCalendar from 'react-google-calendar-api';
-```
 
-### Typescript Import
-
-```
-import ApiCalendar from 'react-google-calendar-api/src/ApiCalendar';
-```
-
-Create a file apiGoogleconfig.json in the root directory with your googleApi clientId and ApiKey.
-https://console.developers.google.com/flows/enableapi?apiid=calendar.
-
-```json
-{
+const config = {
   "clientId": "<CLIENT_ID>",
   "apiKey": "<API_KEY>",
   "scope": "https://www.googleapis.com/auth/calendar",
@@ -37,6 +35,8 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
     "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
   ]
 }
+
+const apiCalendar = new ApiCalendar(config)
 ```
 
 ## Setup
@@ -66,6 +66,17 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
   import React, {ReactNode, SyntheticEvent} from 'react';
   import ApiCalendar from 'react-google-calendar-api';
 
+  const config = {
+    "clientId": "<CLIENT_ID>",
+    "apiKey": "<API_KEY>",
+    "scope": "https://www.googleapis.com/auth/calendar",
+    "discoveryDocs": [
+      "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+    ]
+  }
+
+  const apiCalendar = new ApiCalendar(config)
+
   export default class DoubleButton extends React.Component {
       constructor(props) {
         super(props);
@@ -74,7 +85,7 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
 
       public handleItemClick(event: SyntheticEvent<any>, name: string): void {
         if (name === 'sign-in') {
-          ApiCalendar.handleAuthClick()
+          apiCalendar.handleAuthClick()
           .then(() => {
             console.log('sign in succesful!');
           })
@@ -82,7 +93,7 @@ https://console.developers.google.com/flows/enableapi?apiid=calendar.
             console.error(`sign in failed ${e}`);
           })
         } else if (name === 'sign-out') {
-          ApiCalendar.handleSignoutClick();
+          apiCalendar.handleSignoutClick();
         }
       }
 
@@ -150,12 +161,23 @@ You need to be registered with handleAuthClick.
 ```javascript
 import ApiCalendar from 'react-google-calendar-api';
 
+const config = {
+  "clientId": "<CLIENT_ID>",
+  "apiKey": "<API_KEY>",
+  "scope": "https://www.googleapis.com/auth/calendar",
+  "discoveryDocs": [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
+  ]
+}
+
+const apiCalendar = new ApiCalendar(config)
+
 const eventFromNow: object = {
   summary: 'Poc Dev From Now',
   time: 480,
 };
 
-ApiCalendar.createEventFromNow(eventFromNow)
+apiCalendar.createEventFromNow(eventFromNow)
   .then((result: object) => {
     console.log(result);
   })
@@ -179,12 +201,9 @@ ApiCalendar.createEventFromNow(eventFromNow)
 #### Example
 
 ```javascript
-import ApiCalendar from 'react-google-calendar-api';
-
-if (ApiCalendar.sign)
-  ApiCalendar.listUpcomingEvents(10).then(({ result }: any) => {
+  // The user need to signIn with Handle AuthClick before
+  apiCalendar.listUpcomingEvents(10).then(({ result }: any) => {
     console.log(result.items);
-  });
 ```
 
 ### List All Events:
@@ -200,9 +219,8 @@ if (ApiCalendar.sign)
 ```
 #### Example
 ```javascript
-import ApiCalendar from 'react-google-calendar-api';
-if (ApiCalendar.sign)
-  ApiCalendar.listEvents({
+  // The user need to signIn with Handle AuthClick before
+  apiCalendar.listEvents({
       timeMin: new Date()..toISOString(),
       timeMax: new Date().addDays(10).toISOString(),
       showDeleted: true,
@@ -230,13 +248,11 @@ if (ApiCalendar.sign)
 #### Example
 
 ```javascript
-import ApiCalendar from 'react-google-calendar-api';
-
 const event = {
   summary: 'New Event Title',
 };
 
-ApiCalendar.updateEvent(event, '2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
+apiCalendar.updateEvent(event, '2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 ```
 
 ### Delete Event
@@ -254,9 +270,7 @@ ApiCalendar.updateEvent(event, '2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 #### Example
 
 ```javascript
-import ApiCalendar from 'react-google-calendar-api';
-
-ApiCalendar.deleteEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
+apiCalendar.deleteEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 ```
 
 ### Get Event
@@ -274,95 +288,5 @@ ApiCalendar.deleteEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 #### Example
 
 ```javascript
-import ApiCalendar from 'react-google-calendar-api';
-
-ApiCalendar.getEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
-```
-
-### Get BasicUserProfile Event
-
-```javascript
-   /**
-   * @returns {any} Get the user's basic profile information.
-   * Documentation: https://developers.google.com/identity/sign-in/web/reference#googleusergetbasicprofile
-   */
-   public getBasicUserProfile(): any
-```
-
-#### Examples
-
-```javascript
-import ApiCalendar from 'react-google-calendar-api';
-
-ApiCalendar.getBasicUserProfile('2eo85lmjkkd2i63uo3lhi8a2cq')
-  .getEmail()
-  .then(console.log);
-
-ApiCalendar.getBasicUserProfile('2eo85lmjkkd2i63uo3lhi8a2cq')
-  .getName()
-  .then(console.log);
-```
-
-### or with async/wait
-
-```javascript
-import ApiCalendar from 'react-google-calendar-api';
-
-const response = await ApiCalendar.getBasicUserProfile();
-
-response.getEmail();
-```
-
-## Utils
-
-### listenSign:
-
-```javascript
-     /**
-     * Execute the callback function when a user is disconnected or connected with the sign status.
-     * @param callback
-     */
-    public listenSign(callback: any): void
-```
-
-### onLoad:
-
-```javascript
-    /**
-     * Execute the callback function when gapi is loaded (gapi needs to be loaded to use any other methods)
-     * @param callback
-     */
-    public onLoad(callback: any): void
-```
-
-#### Example
-
-```javascript
-    import React, {ReactNode} from 'react';
-    import ApiCalendar from 'react-google-calendar-api';
-
-    export default class StatusSign extends React.Component<any, any> {
-        constructor(props) {
-            super(props);
-            this.state = {
-              sign: ApiCalendar.sign,
-            };
-            this.signUpdate = this.signUpdate.bind(this);
-            ApiCalendar.onLoad(() => {
-                ApiCalendar.listenSign(this.signUpdate);
-            });
-        }
-
-        public signUpdate(sign: boolean): any {
-            this.setState({
-                sign
-            })
-        }
-
-        render(): ReactNode {
-            return (
-                <div>{this.state.sign}</div>
-            );
-        }
-    }
+apiCalendar.getEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 ```
