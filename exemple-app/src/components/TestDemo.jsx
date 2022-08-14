@@ -18,6 +18,7 @@ const apiCalendar = new ApiCalendar(config)
 
 const TestDemo = () => {
   const [events, setEvents] = useState([]);
+  const [calendars, setCalendars] = useState([]);
   const handleItemClick = (event: SyntheticEvent<any>, name: string): void => {
     if (name === 'sign-in') {
       apiCalendar.handleAuthClick()
@@ -28,21 +29,22 @@ const TestDemo = () => {
 
   return (
     <div>
-      <div style={{ padding: '0.5em' }}>
-        <button onClick={(e) => handleItemClick(e, 'sign-in')}>sign-in</button>
-        <button onClick={(e) => handleItemClick(e, 'sign-out')}>
+      <div style={{ padding: "0.5em" }}>
+        <button onClick={(e) => handleItemClick(e, "sign-in")}>sign-in</button>
+        <button onClick={(e) => handleItemClick(e, "sign-out")}>
           sign-out
         </button>
       </div>
-      <div style={{ padding: '0.5em' }}>
+      <div style={{ padding: "0.5em" }}>
         <button
           onClick={(e) => {
             const eventFromNow: object = {
-              summary: 'Poc Dev From Now',
+              summary: "Poc Dev From Now",
               time: 480,
             };
 
-            apiCalendar.createEventFromNow(eventFromNow)
+            apiCalendar
+              .createEventFromNow(eventFromNow)
               .then((result: object) => {
                 console.log(result);
               })
@@ -54,7 +56,7 @@ const TestDemo = () => {
           Create Event from now
         </button>
       </div>
-      <div style={{ padding: '0.5em' }}>
+      <div style={{ padding: "0.5em" }}>
         <button
           onClick={(e) => {
             apiCalendar.listUpcomingEvents(10).then(({ result }: any) => {
@@ -73,6 +75,36 @@ const TestDemo = () => {
           ))}
         </div>
       </div>
+      <div style={{ padding: "0.5em" }}>
+        <button
+          onClick={(e) => {
+            apiCalendar.listCalendars().then(({ result }: any) => {
+              console.log(result.items);
+              setCalendars(result.items);
+            });
+          }}
+        >
+          List calendars
+        </button>
+        <div>
+          <h4>Calendars</h4>
+          {calendars.length === 0 && <p>No calendars to show</p>}
+          {calendars.map((calendar) => (
+            <p key={calendar.id}>{JSON.stringify(calendar)}</p>
+          ))}
+        </div>
+      </div>
+      <div style={{ padding: "0.5em" }}>
+        <button
+          onClick={(e) => {
+            apiCalendar.createCalendar("myCalendar2").then(({ result }: any) => {
+              console.log(result);
+            });
+          }}
+        >
+          Create calendar
+        </button>
+       </div>
     </div>
   );
 }

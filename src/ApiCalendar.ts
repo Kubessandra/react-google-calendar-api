@@ -9,7 +9,7 @@ const scriptSrcGapi = "https://apis.google.com/js/api.js"
 class ApiCalendar {
   tokenClient: google.accounts.oauth2.TokenClient | null = null;
   onLoadCallback: any = null;
-  calendar: string = 'primary';
+  calendar: string = "primary";
 
   constructor(public config: ConfigApiCalendar) {
     try {
@@ -43,7 +43,7 @@ class ApiCalendar {
       .init({
         apiKey: this.config.apiKey,
         discoveryDocs: this.config.discoveryDocs,
-        hosted_domain: this.config.hosted_domain
+        hosted_domain: this.config.hosted_domain,
       })
       .then((): void => {
         if (this.onLoadCallback) {
@@ -60,8 +60,8 @@ class ApiCalendar {
    * And create gapi in global
    */
   private handleClientLoad(): void {
-    const scriptGoogle = document.createElement('script');
-    const scriptGapi = document.createElement('script');
+    const scriptGoogle = document.createElement("script");
+    const scriptGapi = document.createElement("script");
     scriptGoogle.src = scriptSrcGoogle;
     scriptGoogle.async = true;
     scriptGoogle.defer = true;
@@ -71,13 +71,13 @@ class ApiCalendar {
     document.body.appendChild(scriptGapi);
     document.body.appendChild(scriptGoogle);
     scriptGapi.onload = (): void => {
-      gapi.load('client', this.initGapiClient);
+      gapi.load("client", this.initGapiClient);
     };
     scriptGoogle.onload = async (): Promise<void> => {
       this.tokenClient = await google.accounts.oauth2.initTokenClient({
         client_id: this.config.clientId,
         scope: this.config.scope,
-        prompt: '',
+        prompt: "",
         callback: (): void => {},
       });
     };
@@ -89,15 +89,15 @@ class ApiCalendar {
   public handleAuthClick(): void {
     if (gapi && this.tokenClient) {
       if (gapi.client.getToken() === null) {
-        this.tokenClient.requestAccessToken({ prompt: 'consent' });
+        this.tokenClient.requestAccessToken({ prompt: "consent" });
       } else {
         this.tokenClient.requestAccessToken({
-          prompt: '',
+          prompt: "",
         });
       }
     } else {
-      console.error('Error: this.gapi not loaded');
-      new Error('Error: this.gapi not loaded')
+      console.error("Error: this.gapi not loaded");
+      new Error("Error: this.gapi not loaded");
     }
   }
 
@@ -130,10 +130,10 @@ class ApiCalendar {
       if (token !== null) {
         google.accounts.id.disableAutoSelect();
         google.accounts.oauth2.revoke(token.access_token, (): void => {});
-        gapi.client.setToken(null)
+        gapi.client.setToken(null);
       }
     } else {
-      console.error('Error: this.gapi not loaded');
+      console.error("Error: this.gapi not loaded");
     }
   }
 
@@ -145,7 +145,7 @@ class ApiCalendar {
    */
   public listUpcomingEvents(
     maxResults: number,
-    calendarId: string = this.calendar,
+    calendarId: string = this.calendar
   ): any {
     if (gapi) {
       return gapi.client.calendar.events.list({
@@ -154,10 +154,10 @@ class ApiCalendar {
         showDeleted: false,
         singleEvents: true,
         maxResults: maxResults,
-        orderBy: 'startTime',
+        orderBy: "startTime",
       });
     } else {
-      console.error('Error: this.gapi not loaded');
+      console.error("Error: this.gapi not loaded");
       return false;
     }
   }
@@ -171,7 +171,7 @@ class ApiCalendar {
    */
   public listEvents(
     queryOptions: object,
-    calendarId: string = this.calendar,
+    calendarId: string = this.calendar
   ): any {
     if (gapi) {
       return gapi.client.calendar.events.list({
@@ -179,7 +179,7 @@ class ApiCalendar {
         ...queryOptions,
       });
     } else {
-      console.error('Error: gapi not loaded');
+      console.error("Error: gapi not loaded");
       return false;
     }
   }
@@ -194,9 +194,9 @@ class ApiCalendar {
    * @returns {any}
    */
   public createEventFromNow(
-    { time, summary, description = '' }: any,
+    { time, summary, description = "" }: any,
     calendarId: string = this.calendar,
-    timeZone: string = 'Europe/Paris',
+    timeZone: string = "Europe/Paris"
   ): any {
     const event = {
       summary,
@@ -224,7 +224,7 @@ class ApiCalendar {
   public createEvent(
     event: { end: TimeCalendarType; start: TimeCalendarType },
     calendarId: string = this.calendar,
-    sendUpdates: 'all' | 'externalOnly' | 'none' = 'none',
+    sendUpdates: "all" | "externalOnly" | "none" = "none"
   ): any {
     if (gapi.client.getToken()) {
       return gapi.client.calendar.events.insert({
@@ -234,7 +234,7 @@ class ApiCalendar {
         sendUpdates: sendUpdates,
       });
     } else {
-      console.error('Error: this.gapi not loaded');
+      console.error("Error: this.gapi not loaded");
       return false;
     }
   }
@@ -252,7 +252,7 @@ class ApiCalendar {
         eventId: eventId,
       });
     } else {
-      console.error('Error: gapi is not loaded use onLoad before please.');
+      console.error("Error: gapi is not loaded use onLoad before please.");
       return null;
     }
   }
@@ -269,7 +269,7 @@ class ApiCalendar {
     event: object,
     eventId: string,
     calendarId: string = this.calendar,
-    sendUpdates: string = 'none',
+    sendUpdates: string = "none"
   ): any {
     if (gapi) {
       //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/patch)
@@ -280,7 +280,7 @@ class ApiCalendar {
         sendUpdates: sendUpdates,
       });
     } else {
-      console.error('Error: gapi is not loaded use onLoad before please.');
+      console.error("Error: gapi is not loaded use onLoad before please.");
       return null;
     }
   }
@@ -299,7 +299,34 @@ class ApiCalendar {
         eventId: eventId,
       });
     } else {
-      console.error('Error: gapi is not loaded use onLoad before please.');
+      console.error("Error: gapi is not loaded use onLoad before please.");
+      return null;
+    }
+  }
+
+  /**
+   * Get Calendar List
+   * @returns {any}
+   */
+  listCalendars(): any {
+    if (gapi) {
+      return gapi.client.calendar.calendarList.list();
+    } else {
+      console.error("Error: gapi is not loaded use onLoad before please.");
+      return null;
+    }
+  }
+
+  /**
+   * Create Calendar
+   * @param {string} summary, title of the calendar.
+   * @returns {any}
+   */
+  createCalendar(summary: string): any {
+    if (gapi) {
+      return gapi.client.calendar.calendars.insert({summary: summary});
+    } else {
+      console.error("Error: gapi is not loaded use onLoad before please.");
       return null;
     }
   }
