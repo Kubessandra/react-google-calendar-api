@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/Insomniiak/react-google-calendar-api.git"
+    "url": "git+ssh://git@github.com/Kubessandra/react-google-calendar-api.git"
   },
   "keywords": [
     "react",
@@ -36,9 +36,9 @@
   "author": "aymeric beudaert",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Insomniiak/react-google-calendar-api/issues"
+    "url": "https://github.com/Kubessandra/react-google-calendar-api/issues"
   },
-  "homepage": "https://github.com/Insomniiak/react-google-calendar-api#readme",
+  "homepage": "https://github.com/Kubessandra/react-google-calendar-api#readme",
   "devDependencies": {
     "@types/gapi": "^0.0.42",
     "@types/gapi.calendar": "^3.0.6",
