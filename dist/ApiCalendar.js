@@ -226,6 +226,22 @@ var ApiCalendar = class {
       return null;
     }
   }
+  listCalendars() {
+    if (gapi) {
+      return gapi.client.calendar.calendarList.list();
+    } else {
+      console.error("Error: gapi is not loaded use onLoad before please.");
+      return null;
+    }
+  }
+  createCalendar(summary) {
+    if (gapi) {
+      return gapi.client.calendar.calendars.insert({ summary });
+    } else {
+      console.error("Error: gapi is not loaded use onLoad before please.");
+      return null;
+    }
+  }
 };
 var ApiCalendar_default = ApiCalendar;
 // Annotate the CommonJS export names for ESM import in node:

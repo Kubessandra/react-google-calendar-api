@@ -79,7 +79,7 @@ declare class ApiCalendar {
     createEvent(event: {
         end: TimeCalendarType;
         start: TimeCalendarType;
-    }, calendarId?: string, sendUpdates?: 'all' | 'externalOnly' | 'none'): any;
+    }, calendarId?: string, sendUpdates?: "all" | "externalOnly" | "none"): any;
     /**
      * Delete an event in the calendar.
      * @param {string} eventId of the event to delete.
@@ -103,6 +103,17 @@ declare class ApiCalendar {
      * @returns {any}
      */
     getEvent(eventId: string, calendarId?: string): any;
+    /**
+     * Get Calendar List
+     * @returns {any}
+     */
+    listCalendars(): any;
+    /**
+     * Create Calendar
+     * @param {string} summary, title of the calendar.
+     * @returns {any}
+     */
+    createCalendar(summary: string): any;
 }
 
 export { ApiCalendar as default };
