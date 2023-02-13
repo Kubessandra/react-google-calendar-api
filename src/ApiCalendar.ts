@@ -1,4 +1,4 @@
-import { ConfigApiCalendar, TimeCalendarType, Event } from "./type";
+import { ConfigApiCalendar, TimeCalendarType } from "./type";
 
 const scriptSrcGoogle = "https://accounts.google.com/gsi/client";
 const scriptSrcGapi = "https://apis.google.com/js/api.js";
@@ -216,23 +216,20 @@ class ApiCalendar {
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @param {string} sendNotifications Sends email notification to attendees
    * @returns {any}
    */
   public createEvent(
-    event: { end: TimeCalendarType; start: TimeCalendarType } | Event,
+    event: { end: TimeCalendarType; start: TimeCalendarType },
     calendarId: string = this.calendar,
-    sendUpdates: "all" | "externalOnly" | "none" = "none",
-    sendNotifications: boolean = true
+    sendUpdates: "all" | "externalOnly" | "none" = "none"
   ): any {
     if (gapi.client.getToken()) {
       return gapi.client.calendar.events.insert({
         calendarId: calendarId,
-        //@ts-ignore
         resource: event,
-        sendNotifications,
         //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
-        sendUpdates: sendUpdates,
+        sendUpdates,
+        conferenceDataVersion: 1,
       });
     } else {
       console.error("Error: this.gapi not loaded");
@@ -245,39 +242,28 @@ class ApiCalendar {
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @param {string} sendNotifications Sends email notification to attendees
    * @returns {any}
    */
   public createEventWithVideoConference(
-    event: { end: TimeCalendarType; start: TimeCalendarType } | Event,
+    event: any,
     calendarId: string = this.calendar,
-    sendUpdates: "all" | "externalOnly" | "none" = "none",
-    sendNotifications: boolean = true
+    sendUpdates: "all" | "externalOnly" | "none" = "none"
   ): any {
-    if (gapi.client.getToken()) {
-      return gapi.client.calendar.events.insert({
-        calendarId: calendarId,
-        resource: {
-          ...event,
-          //@ts-ignore
-          conferenceData: {
-            createRequest: {
-              requestId: crypto.randomUUID(),
-              conferenceSolutionKey: {
-                type: "hangoutsMeet",
-              },
+    return this.createEvent(
+      {
+        ...event,
+        conferenceData: {
+          createRequest: {
+            requestId: crypto.randomUUID(),
+            conferenceSolutionKey: {
+              type: "hangoutsMeet",
             },
           },
         },
-        sendNotifications,
-        //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
-        sendUpdates,
-        conferenceDataVersion: 1,
-      });
-    } else {
-      console.error("Error: this.gapi not loaded");
-      return false;
-    }
+      },
+      calendarId,
+      sendUpdates
+    );
   }
 
   /**

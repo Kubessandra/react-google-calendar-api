@@ -251,18 +251,16 @@ var ApiCalendar = class {
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @param {string} sendNotifications Sends email notification to attendees
    * @returns {any}
    */
-  createEvent(event, calendarId = this.calendar, sendUpdates = "none", sendNotifications = true) {
+  createEvent(event, calendarId = this.calendar, sendUpdates = "none") {
     if (gapi.client.getToken()) {
       return gapi.client.calendar.events.insert({
         calendarId,
-        //@ts-ignore
         resource: event,
-        sendNotifications,
         //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
-        sendUpdates
+        sendUpdates,
+        conferenceDataVersion: 1
       });
     } else {
       console.error("Error: this.gapi not loaded");
@@ -274,33 +272,23 @@ var ApiCalendar = class {
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @param {string} sendNotifications Sends email notification to attendees
    * @returns {any}
    */
-  createEventWithVideoConference(event, calendarId = this.calendar, sendUpdates = "none", sendNotifications = true) {
-    if (gapi.client.getToken()) {
-      return gapi.client.calendar.events.insert({
-        calendarId,
-        resource: __spreadProps(__spreadValues({}, event), {
-          //@ts-ignore
-          conferenceData: {
-            createRequest: {
-              requestId: crypto.randomUUID(),
-              conferenceSolutionKey: {
-                type: "hangoutsMeet"
-              }
+  createEventWithVideoConference(event, calendarId = this.calendar, sendUpdates = "none") {
+    return this.createEvent(
+      __spreadProps(__spreadValues({}, event), {
+        conferenceData: {
+          createRequest: {
+            requestId: crypto.randomUUID(),
+            conferenceSolutionKey: {
+              type: "hangoutsMeet"
             }
           }
-        }),
-        sendNotifications,
-        //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
-        sendUpdates,
-        conferenceDataVersion: 1
-      });
-    } else {
-      console.error("Error: this.gapi not loaded");
-      return false;
-    }
+        }
+      }),
+      calendarId,
+      sendUpdates
+    );
   }
   /**
    * Delete an event in the calendar.
