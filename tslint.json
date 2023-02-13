@@ -1,3 +1,6 @@
 {
-  "extends": ["linted"]
+  "extends": ["linted"],
+  "rules": {
+    "quotemark": [false]
+  }
 }

@@ -1,10 +1,7 @@
-import {
-  ConfigApiCalendar,
-  TimeCalendarType,
-} from './type';
+import { ConfigApiCalendar, TimeCalendarType, Event } from "./type";
 
-const scriptSrcGoogle = "https://accounts.google.com/gsi/client"
-const scriptSrcGapi = "https://apis.google.com/js/api.js"
+const scriptSrcGoogle = "https://accounts.google.com/gsi/client";
+const scriptSrcGapi = "https://apis.google.com/js/api.js";
 
 class ApiCalendar {
   tokenClient: google.accounts.oauth2.TokenClient | null = null;
@@ -219,19 +216,63 @@ class ApiCalendar {
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
+   * @param {string} sendNotifications Sends email notofication to attendees
    * @returns {any}
    */
   public createEvent(
-    event: { end: TimeCalendarType; start: TimeCalendarType },
+    event: { end: TimeCalendarType; start: TimeCalendarType } | Event,
     calendarId: string = this.calendar,
-    sendUpdates: "all" | "externalOnly" | "none" = "none"
+    sendUpdates: "all" | "externalOnly" | "none" = "none",
+    sendNotifications: boolean = true
   ): any {
     if (gapi.client.getToken()) {
       return gapi.client.calendar.events.insert({
         calendarId: calendarId,
+        //@ts-ignore
         resource: event,
+        sendNotifications,
         //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
         sendUpdates: sendUpdates,
+      });
+    } else {
+      console.error("Error: this.gapi not loaded");
+      return false;
+    }
+  }
+
+  /**
+   * Create Calendar event with video conference
+   * @param {string} calendarId for the event.
+   * @param {object} event with start and end dateTime
+   * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
+   * @param {string} sendNotifications Sends email notofication to attendees
+   * @returns {any}
+   */
+  public createEventWithVideoConference(
+    event: { end: TimeCalendarType; start: TimeCalendarType } | Event,
+    calendarId: string = this.calendar,
+    sendUpdates: "all" | "externalOnly" | "none" = "none",
+    sendNotifications: boolean = true
+  ): any {
+    if (gapi.client.getToken()) {
+      return gapi.client.calendar.events.insert({
+        calendarId: calendarId,
+        resource: {
+          ...event,
+          //@ts-ignore
+          conferenceData: {
+            createRequest: {
+              requestId: crypto.randomUUID(),
+              conferenceSolutionKey: {
+                type: "hangoutsMeet",
+              },
+            },
+          },
+        },
+        sendNotifications,
+        //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
+        sendUpdates,
+        conferenceDataVersion: 1,
       });
     } else {
       console.error("Error: this.gapi not loaded");
@@ -324,7 +365,7 @@ class ApiCalendar {
    */
   createCalendar(summary: string): any {
     if (gapi) {
-      return gapi.client.calendar.calendars.insert({summary: summary});
+      return gapi.client.calendar.calendars.insert({ summary: summary });
     } else {
       console.error("Error: gapi is not loaded use onLoad before please.");
       return null;

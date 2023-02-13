@@ -9,6 +9,30 @@ interface TimeCalendarType {
     dateTime?: string;
     timeZone: string;
 }
+interface Event {
+    summary?: string | undefined;
+    description?: string | undefined;
+    start: TimeCalendarType;
+    end: TimeCalendarType;
+    attendees?: {
+        email: string;
+    }[] | undefined;
+    reminders?: {
+        useDefault?: boolean;
+        overrides?: {
+            method: string;
+            minutes: number;
+        }[];
+    } | undefined;
+    conferenceData?: {
+        createRequest: {
+            requestId: string;
+            conferenceSolutionKey: {
+                type: string;
+            };
+        };
+    } | undefined;
+}
 
 declare class ApiCalendar {
     config: ConfigApiCalendar;
@@ -74,12 +98,25 @@ declare class ApiCalendar {
      * @param {string} calendarId for the event.
      * @param {object} event with start and end dateTime
      * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
+     * @param {string} sendNotifications Sends email notofication to attendees
      * @returns {any}
      */
     createEvent(event: {
         end: TimeCalendarType;
         start: TimeCalendarType;
-    }, calendarId?: string, sendUpdates?: "all" | "externalOnly" | "none"): any;
+    } | Event, calendarId?: string, sendUpdates?: "all" | "externalOnly" | "none", sendNotifications?: boolean): any;
+    /**
+     * Create Calendar event with video conference
+     * @param {string} calendarId for the event.
+     * @param {object} event with start and end dateTime
+     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
+     * @param {string} sendNotifications Sends email notofication to attendees
+     * @returns {any}
+     */
+    createEventWithVideoConference(event: {
+        end: TimeCalendarType;
+        start: TimeCalendarType;
+    } | Event, calendarId?: string, sendUpdates?: "all" | "externalOnly" | "none", sendNotifications?: boolean): any;
     /**
      * Delete an event in the calendar.
      * @param {string} eventId of the event to delete.
