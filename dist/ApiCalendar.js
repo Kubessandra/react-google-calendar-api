@@ -251,7 +251,7 @@ var ApiCalendar = class {
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @param {string} sendNotifications Sends email notofication to attendees
+   * @param {string} sendNotifications Sends email notification to attendees
    * @returns {any}
    */
   createEvent(event, calendarId = this.calendar, sendUpdates = "none", sendNotifications = true) {
@@ -274,7 +274,7 @@ var ApiCalendar = class {
    * @param {string} calendarId for the event.
    * @param {object} event with start and end dateTime
    * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @param {string} sendNotifications Sends email notofication to attendees
+   * @param {string} sendNotifications Sends email notification to attendees
    * @returns {any}
    */
   createEventWithVideoConference(event, calendarId = this.calendar, sendUpdates = "none", sendNotifications = true) {
