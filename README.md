@@ -10,11 +10,13 @@ An api to manage your google calendar
 ## Install
 
 Npm
+
 ```
 npm install --save react-google-calendar-api
 ```
 
 yarn
+
 ```
 yarn add react-google-calendar-api
 ```
@@ -25,18 +27,18 @@ You will need to enable the "Google Calendar API"(https://console.developers.goo
 You will need a clientId and ApiKey from Google(https://developers.google.com/workspace/guides/create-credentials)
 
 ```javascript
-import ApiCalendar from 'react-google-calendar-api';
+import ApiCalendar from "react-google-calendar-api";
 
 const config = {
-  "clientId": "<CLIENT_ID>",
-  "apiKey": "<API_KEY>",
-  "scope": "https://www.googleapis.com/auth/calendar",
-  "discoveryDocs": [
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
-  ]
-}
+  clientId: "<CLIENT_ID>",
+  apiKey: "<API_KEY>",
+  scope: "https://www.googleapis.com/auth/calendar",
+  discoveryDocs: [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+  ],
+};
 
-const apiCalendar = new ApiCalendar(config)
+const apiCalendar = new ApiCalendar(config);
 ```
 
 ## Setup
@@ -132,7 +134,7 @@ You need to be registered with handleAuthClick.
     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
     * @returns {any} Promise on the event.
     */
-   public createEvent(event: object, calendarId: string = this.calendar, sendUpdates: string = 'none',): any {
+   public createEvent(event: object, calendarId: string = this.calendar, sendUpdates: string = 'none',): any
 ```
 
 ### Create Event From Now:
@@ -150,28 +152,67 @@ You need to be registered with handleAuthClick.
     public createEventFromNow({time, summary, description = ''}: any, calendarId: string = this.calendar, timeZone: string = "Europe/Paris"): any
 ```
 
+### Create Event With Video Conference:
+
+```javascript
+     /**
+     * Create Calendar event with video conference
+     * @param {object} event with start and end dateTime
+     * @param {string} calendarId for the event.
+     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
+     * @returns {any}
+     */
+  public createEventWithVideoConference(
+    event: any,
+    calendarId: string = this.calendar,
+    sendUpdates: "all" | "externalOnly" | "none" = "none"
+  ): any
+```
+
 #### Example
 
 ```javascript
-import ApiCalendar from 'react-google-calendar-api';
+import ApiCalendar from "react-google-calendar-api";
 
 const config = {
-  "clientId": "<CLIENT_ID>",
-  "apiKey": "<API_KEY>",
-  "scope": "https://www.googleapis.com/auth/calendar",
-  "discoveryDocs": [
-    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
-  ]
-}
+  clientId: "<CLIENT_ID>",
+  apiKey: "<API_KEY>",
+  scope: "https://www.googleapis.com/auth/calendar",
+  discoveryDocs: [
+    "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+  ],
+};
 
-const apiCalendar = new ApiCalendar(config)
+const apiCalendar = new ApiCalendar(config);
 
 const eventFromNow: object = {
-  summary: 'Poc Dev From Now',
+  summary: "Poc Dev From Now",
   time: 480,
 };
 
-apiCalendar.createEventFromNow(eventFromNow)
+apiCalendar
+  .createEventFromNow(eventFromNow)
+  .then((result: object) => {
+    console.log(result);
+  })
+  .catch((error: any) => {
+    console.log(error);
+  });
+
+const eventWithVideoConference: object = {
+  summary: "Event With Google Meet Conference",
+  start: {
+    dateTime: new Date().toISOString(),
+    timeZone: "Europe/Paris",
+  },
+  end: {
+    dateTime: new Date(new Date().getTime() + 3600000).toISOString(),
+    timeZone: "Europe/Paris",
+  },
+};
+
+apiCalendar
+  .createEventWithVideoConference(eventWithVideoConference)
   .then((result: object) => {
     console.log(result);
   })
@@ -201,6 +242,7 @@ apiCalendar.createEventFromNow(eventFromNow)
 ```
 
 ### List All Events:
+
 ```javascript
     /**
      * List all events in the calendar queried by custom query options
@@ -211,7 +253,9 @@ apiCalendar.createEventFromNow(eventFromNow)
      */
     public listEvents(queryOptions, calendarId = this.calendar): any
 ```
+
 #### Example
+
 ```javascript
   // The user need to signIn with Handle AuthClick before
   apiCalendar.listEvents({
@@ -243,10 +287,10 @@ apiCalendar.createEventFromNow(eventFromNow)
 
 ```javascript
 const event = {
-  summary: 'New Event Title',
+  summary: "New Event Title",
 };
 
-apiCalendar.updateEvent(event, '2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
+apiCalendar.updateEvent(event, "2eo85lmjkkd2i63uo3lhi8a2cq").then(console.log);
 ```
 
 ### Delete Event
@@ -264,7 +308,7 @@ apiCalendar.updateEvent(event, '2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 #### Example
 
 ```javascript
-apiCalendar.deleteEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
+apiCalendar.deleteEvent("2eo85lmjkkd2i63uo3lhi8a2cq").then(console.log);
 ```
 
 ### Get Event
@@ -282,5 +326,5 @@ apiCalendar.deleteEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
 #### Example
 
 ```javascript
-apiCalendar.getEvent('2eo85lmjkkd2i63uo3lhi8a2cq').then(console.log);
+apiCalendar.getEvent("2eo85lmjkkd2i63uo3lhi8a2cq").then(console.log);
 ```
