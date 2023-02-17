@@ -81,6 +81,14 @@ declare class ApiCalendar {
         start: TimeCalendarType;
     }, calendarId?: string, sendUpdates?: "all" | "externalOnly" | "none"): any;
     /**
+     * Create Calendar event with video conference
+     * @param {string} calendarId for the event.
+     * @param {object} event with start and end dateTime
+     * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
+     * @returns {any}
+     */
+    createEventWithVideoConference(event: any, calendarId?: string, sendUpdates?: "all" | "externalOnly" | "none"): any;
+    /**
      * Delete an event in the calendar.
      * @param {string} eventId of the event to delete.
      * @param {string} calendarId where the event is.
