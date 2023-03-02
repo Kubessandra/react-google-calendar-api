@@ -1,4 +1,3 @@
-"use strict";
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -33,26 +32,6 @@ var __copyProps = (to, from, except, desc) => {
   return to;
 };
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-var __async = (__this, __arguments, generator) => {
-  return new Promise((resolve, reject) => {
-    var fulfilled = (value) => {
-      try {
-        step(generator.next(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var rejected = (value) => {
-      try {
-        step(generator.throw(value));
-      } catch (e) {
-        reject(e);
-      }
-    };
-    var step = (x) => x.done ? resolve(x.value) : Promise.resolve(x.value).then(fulfilled, rejected);
-    step((generator = generator.apply(__this, __arguments)).next());
-  });
-};
 
 // src/ApiCalendar.ts
 var ApiCalendar_exports = {};
@@ -89,9 +68,6 @@ var ApiCalendar = class {
   get sign() {
     return !!this.tokenClient;
   }
-  /**
-   * Auth to the google Api.
-   */
   initGapiClient() {
     gapi.client.init({
       apiKey: this.config.apiKey,
@@ -105,10 +81,6 @@ var ApiCalendar = class {
       console.log(e);
     });
   }
-  /**
-   * Init Google Api
-   * And create gapi in global
-   */
   handleClientLoad() {
     const scriptGoogle = document.createElement("script");
     const scriptGapi = document.createElement("script");
@@ -123,19 +95,16 @@ var ApiCalendar = class {
     scriptGapi.onload = () => {
       gapi.load("client", this.initGapiClient);
     };
-    scriptGoogle.onload = () => __async(this, null, function* () {
-      this.tokenClient = yield google.accounts.oauth2.initTokenClient({
+    scriptGoogle.onload = async () => {
+      this.tokenClient = await google.accounts.oauth2.initTokenClient({
         client_id: this.config.clientId,
         scope: this.config.scope,
         prompt: "",
         callback: () => {
         }
       });
-    });
+    };
   }
-  /**
-   * Sign in Google user account
-   */
   handleAuthClick() {
     if (gapi && this.tokenClient) {
       if (gapi.client.getToken() === null) {
@@ -150,17 +119,9 @@ var ApiCalendar = class {
       new Error("Error: this.gapi not loaded");
     }
   }
-  /**
-   * Set the default attribute calendar
-   * @param {string} newCalendar
-   */
   setCalendar(newCalendar) {
     this.calendar = newCalendar;
   }
-  /**
-   * Execute the callback function when gapi is loaded
-   * @param callback
-   */
   onLoad(callback) {
     if (gapi) {
       callback();
@@ -168,9 +129,6 @@ var ApiCalendar = class {
       this.onLoadCallback = callback;
     }
   }
-  /**
-   * Sign out user google account
-   */
   handleSignoutClick() {
     if (gapi) {
       const token = gapi.client.getToken();
@@ -184,17 +142,11 @@ var ApiCalendar = class {
       console.error("Error: this.gapi not loaded");
     }
   }
-  /**
-   * List all events in the calendar
-   * @param {number} maxResults to see
-   * @param {string} calendarId to see by default use the calendar attribute
-   * @returns {any}
-   */
   listUpcomingEvents(maxResults, calendarId = this.calendar) {
     if (gapi) {
       return gapi.client.calendar.events.list({
         calendarId,
-        timeMin: (/* @__PURE__ */ new Date()).toISOString(),
+        timeMin: new Date().toISOString(),
         showDeleted: false,
         singleEvents: true,
         maxResults,
@@ -205,13 +157,6 @@ var ApiCalendar = class {
       return false;
     }
   }
-  /**
-   * List all events in the calendar queried by custom query options
-   * See all available options here https://developers.google.com/calendar/v3/reference/events/list
-   * @param {object} queryOptions to see
-   * @param {string} calendarId to see by default use the calendar attribute
-   * @returns {any}
-   */
   listEvents(queryOptions, calendarId = this.calendar) {
     if (gapi) {
       return gapi.client.calendar.events.list(__spreadValues({
@@ -222,43 +167,26 @@ var ApiCalendar = class {
       return false;
     }
   }
-  /**
-   * Create an event from the current time for a certain period
-   * @param {number} time in minutes for the event
-   * @param {string} summary of the event
-   * @param {string} description of the event
-   * @param {string} calendarId
-   * @param {string} timeZone The time zone in which the time is specified. (Formatted as an IANA Time Zone Database name, e.g. "Europe/Zurich".)
-   * @returns {any}
-   */
   createEventFromNow({ time, summary, description = "" }, calendarId = this.calendar, timeZone = "Europe/Paris") {
     const event = {
       summary,
       description,
       start: {
-        dateTime: (/* @__PURE__ */ new Date()).toISOString(),
+        dateTime: new Date().toISOString(),
         timeZone
       },
       end: {
-        dateTime: new Date((/* @__PURE__ */ new Date()).getTime() + time * 6e4).toISOString(),
+        dateTime: new Date(new Date().getTime() + time * 6e4).toISOString(),
         timeZone
       }
     };
     return this.createEvent(event, calendarId);
   }
-  /**
-   * Create Calendar event
-   * @param {string} calendarId for the event.
-   * @param {object} event with start and end dateTime
-   * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @returns {any}
-   */
   createEvent(event, calendarId = this.calendar, sendUpdates = "none") {
     if (gapi.client.getToken()) {
       return gapi.client.calendar.events.insert({
         calendarId,
         resource: event,
-        //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
         sendUpdates,
         conferenceDataVersion: 1
       });
@@ -267,35 +195,18 @@ var ApiCalendar = class {
       return false;
     }
   }
-  /**
-   * Create Calendar event with video conference
-   * @param {string} calendarId for the event.
-   * @param {object} event with start and end dateTime
-   * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @returns {any}
-   */
   createEventWithVideoConference(event, calendarId = this.calendar, sendUpdates = "none") {
-    return this.createEvent(
-      __spreadProps(__spreadValues({}, event), {
-        conferenceData: {
-          createRequest: {
-            requestId: crypto.randomUUID(),
-            conferenceSolutionKey: {
-              type: "hangoutsMeet"
-            }
+    return this.createEvent(__spreadProps(__spreadValues({}, event), {
+      conferenceData: {
+        createRequest: {
+          requestId: crypto.randomUUID(),
+          conferenceSolutionKey: {
+            type: "hangoutsMeet"
           }
         }
-      }),
-      calendarId,
-      sendUpdates
-    );
+      }
+    }), calendarId, sendUpdates);
   }
-  /**
-   * Delete an event in the calendar.
-   * @param {string} eventId of the event to delete.
-   * @param {string} calendarId where the event is.
-   * @returns {any} Promise resolved when the event is deleted.
-   */
   deleteEvent(eventId, calendarId = this.calendar) {
     if (gapi) {
       return gapi.client.calendar.events.delete({
@@ -307,14 +218,6 @@ var ApiCalendar = class {
       return null;
     }
   }
-  /**
-   * Update Calendar event
-   * @param {string} calendarId for the event.
-   * @param {string} eventId of the event.
-   * @param {object} event with details to update, e.g. summary
-   * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
-   * @returns {any}
-   */
   updateEvent(event, eventId, calendarId = this.calendar, sendUpdates = "none") {
     if (gapi) {
       return gapi.client.calendar.events.patch({
@@ -328,12 +231,6 @@ var ApiCalendar = class {
       return null;
     }
   }
-  /**
-   * Get Calendar event
-   * @param {string} calendarId for the event.
-   * @param {string} eventId specifies individual event
-   * @returns {any}
-   */
   getEvent(eventId, calendarId = this.calendar) {
     if (gapi) {
       return gapi.client.calendar.events.get({
@@ -345,10 +242,6 @@ var ApiCalendar = class {
       return null;
     }
   }
-  /**
-   * Get Calendar List
-   * @returns {any}
-   */
   listCalendars() {
     if (gapi) {
       return gapi.client.calendar.calendarList.list();
@@ -357,11 +250,6 @@ var ApiCalendar = class {
       return null;
     }
   }
-  /**
-   * Create Calendar
-   * @param {string} summary, title of the calendar.
-   * @returns {any}
-   */
   createCalendar(summary) {
     if (gapi) {
       return gapi.client.calendar.calendars.insert({ summary });
