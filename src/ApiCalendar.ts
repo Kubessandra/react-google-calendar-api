@@ -1,10 +1,7 @@
-import {
-  ConfigApiCalendar,
-  TimeCalendarType,
-} from './type';
+import { ConfigApiCalendar, TimeCalendarType } from "./type";
 
-const scriptSrcGoogle = "https://accounts.google.com/gsi/client"
-const scriptSrcGapi = "https://apis.google.com/js/api.js"
+const scriptSrcGoogle = "https://accounts.google.com/gsi/client";
+const scriptSrcGapi = "https://apis.google.com/js/api.js";
 
 class ApiCalendar {
   tokenClient: google.accounts.oauth2.TokenClient | null = null;
@@ -231,12 +228,42 @@ class ApiCalendar {
         calendarId: calendarId,
         resource: event,
         //@ts-ignore the @types/gapi.calendar package is not up to date(https://developers.google.com/calendar/api/v3/reference/events/insert)
-        sendUpdates: sendUpdates,
+        sendUpdates,
+        conferenceDataVersion: 1,
       });
     } else {
       console.error("Error: this.gapi not loaded");
       return false;
     }
+  }
+
+  /**
+   * Create Calendar event with video conference
+   * @param {string} calendarId for the event.
+   * @param {object} event with start and end dateTime
+   * @param {string} sendUpdates Acceptable values are: "all", "externalOnly", "none"
+   * @returns {any}
+   */
+  public createEventWithVideoConference(
+    event: any,
+    calendarId: string = this.calendar,
+    sendUpdates: "all" | "externalOnly" | "none" = "none"
+  ): any {
+    return this.createEvent(
+      {
+        ...event,
+        conferenceData: {
+          createRequest: {
+            requestId: crypto.randomUUID(),
+            conferenceSolutionKey: {
+              type: "hangoutsMeet",
+            },
+          },
+        },
+      },
+      calendarId,
+      sendUpdates
+    );
   }
 
   /**
@@ -324,7 +351,7 @@ class ApiCalendar {
    */
   createCalendar(summary: string): any {
     if (gapi) {
-      return gapi.client.calendar.calendars.insert({summary: summary});
+      return gapi.client.calendar.calendars.insert({ summary: summary });
     } else {
       console.error("Error: gapi is not loaded use onLoad before please.");
       return null;
