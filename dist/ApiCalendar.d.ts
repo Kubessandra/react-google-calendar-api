@@ -32,9 +32,9 @@ declare class ApiCalendar {
     private handleClientLoad;
     /**
      * Sign in Google user account
-     * @returns {any} Promise resolved if authentication is successful, rejected if unsuccessful.
+     * @returns {Promise<void>} Promise resolved if authentication is successful, rejected if unsuccessful.
      */
-    handleAuthClick(): any;
+    handleAuthClick(): Promise<void>;
     /**
      * Set the default attribute calendar
      * @param {string} newCalendar

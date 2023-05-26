@@ -135,31 +135,33 @@ var ApiCalendar = class {
   }
   /**
    * Sign in Google user account
-   * @returns {any} Promise resolved if authentication is successful, rejected if unsuccessful.
+   * @returns {Promise<void>} Promise resolved if authentication is successful, rejected if unsuccessful.
    */
   handleAuthClick() {
-    if (gapi && this.tokenClient) {
-      return new Promise((resolve, reject) => {
-        this.tokenClient.callback = (resp) => {
-          if (resp.error) {
+    return __async(this, null, function* () {
+      if (gapi && this.tokenClient) {
+        return new Promise((resolve, reject) => {
+          this.tokenClient.callback = (resp) => {
+            if (resp.error) {
+              reject(resp);
+            } else {
+              resolve(resp);
+            }
+          };
+          this.tokenClient.error_callback = (resp) => {
             reject(resp);
+          };
+          if (gapi.client.getToken() === null) {
+            this.tokenClient.requestAccessToken({ prompt: "consent" });
           } else {
-            resolve(resp);
+            this.tokenClient.requestAccessToken({ prompt: "" });
           }
-        };
-        this.tokenClient.error_callback = (resp) => {
-          reject(resp);
-        };
-        if (gapi.client.getToken() === null) {
-          this.tokenClient.requestAccessToken({ prompt: "consent" });
-        } else {
-          this.tokenClient.requestAccessToken({ prompt: "" });
-        }
-      });
-    } else {
-      console.error("Error: this.gapi not loaded");
-      return Promise.reject(new Error("Error: this.gapi not loaded"));
-    }
+        });
+      } else {
+        console.error("Error: this.gapi not loaded");
+        return Promise.reject(new Error("Error: this.gapi not loaded"));
+      }
+    });
   }
   /**
    * Set the default attribute calendar

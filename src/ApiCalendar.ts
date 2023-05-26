@@ -87,9 +87,9 @@ class ApiCalendar {
 
   /**
    * Sign in Google user account
-   * @returns {any} Promise resolved if authentication is successful, rejected if unsuccessful.
+   * @returns {Promise<void>} Promise resolved if authentication is successful, rejected if unsuccessful.
    */
-  public handleAuthClick(): any {
+  public async handleAuthClick(): Promise<void> {
     if (gapi && this.tokenClient) {
       return new Promise<void>((resolve: (resp: any) => void, reject: (resp: any) => void): void => {
         this.tokenClient!.callback = (resp: any): void => {
