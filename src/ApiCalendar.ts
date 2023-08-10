@@ -3,8 +3,13 @@ import { ConfigApiCalendar, TimeCalendarType } from "./type";
 const scriptSrcGoogle = "https://accounts.google.com/gsi/client";
 const scriptSrcGapi = "https://apis.google.com/js/api.js";
 
+interface ExtendedTokenClient extends google.accounts.oauth2.TokenClient {
+  callback?: (resp: any) => void;
+  error_callback?: (resp: any) => void;
+}
+
 class ApiCalendar {
-  tokenClient: google.accounts.oauth2.TokenClient | null = null;
+  tokenClient: ExtendedTokenClient | null = null;
   onLoadCallback: any = null;
   calendar: string = "primary";
 
@@ -82,19 +87,30 @@ class ApiCalendar {
 
   /**
    * Sign in Google user account
+   * @returns {Promise<void>} Promise resolved if authentication is successful, rejected if unsuccessful.
    */
-  public handleAuthClick(): void {
+  public async handleAuthClick(): Promise<void> {
     if (gapi && this.tokenClient) {
-      if (gapi.client.getToken() === null) {
-        this.tokenClient.requestAccessToken({ prompt: "consent" });
-      } else {
-        this.tokenClient.requestAccessToken({
-          prompt: "",
-        });
-      }
+      return new Promise<void>((resolve: (resp: any) => void, reject: (resp: any) => void): void => {
+        this.tokenClient!.callback = (resp: any): void => {
+          if (resp.error) {
+            reject(resp);
+          } else {
+            resolve(resp);
+          }
+        };
+        this.tokenClient!.error_callback = (resp: any): void => {
+          reject(resp);
+        };
+        if (gapi.client.getToken() === null) {
+          this.tokenClient!.requestAccessToken({ prompt: "consent" });
+        } else {
+          this.tokenClient!.requestAccessToken({ prompt: "" });
+        }
+      });
     } else {
       console.error("Error: this.gapi not loaded");
-      new Error("Error: this.gapi not loaded");
+      return Promise.reject(new Error("Error: this.gapi not loaded"));
     }
   }
 

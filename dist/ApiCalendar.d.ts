@@ -10,9 +10,13 @@ interface TimeCalendarType {
     timeZone: string;
 }
 
+interface ExtendedTokenClient extends google.accounts.oauth2.TokenClient {
+    callback?: (resp: any) => void;
+    error_callback?: (resp: any) => void;
+}
 declare class ApiCalendar {
     config: ConfigApiCalendar;
-    tokenClient: google.accounts.oauth2.TokenClient | null;
+    tokenClient: ExtendedTokenClient | null;
     onLoadCallback: any;
     calendar: string;
     constructor(config: ConfigApiCalendar);
@@ -28,8 +32,9 @@ declare class ApiCalendar {
     private handleClientLoad;
     /**
      * Sign in Google user account
+     * @returns {Promise<void>} Promise resolved if authentication is successful, rejected if unsuccessful.
      */
-    handleAuthClick(): void;
+    handleAuthClick(): Promise<void>;
     /**
      * Set the default attribute calendar
      * @param {string} newCalendar
